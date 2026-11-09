@@ -1,0 +1,4 @@
+url,relative_path,referenced_by,status,http_status,bytes
+https://example.test/wp-content/uploads/2025/03/photo-a.jpg,2025/03/photo-a.jpg,featured:1001,downloaded,200,3
+https://example.test/wp-content/uploads/2025/03/photo-b.jpg,2025/03/photo-b.jpg,post:1001,downloaded,200,4
+https://example.test/wp-content/uploads/2025/03/duplicate.jpg,2025/03/duplicate.jpg,post:1002,downloaded,200,4

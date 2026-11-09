@@ -1,0 +1,18 @@
+wp_id,post_type,status,title,slug,classification,in_migration_scope
+1001,post,publish,First Article,first-article,news,yes
+1002,post,publish,Second Article,second-article,news,yes
+1003,post,publish,Third Article,third-article,news,yes
+1004,post,publish,Fourth Article,fourth-article,news,yes
+1005,post,publish,Fifth Article,fifth-article,news,yes
+1006,post,publish,Sixth Article,sixth-article,news,yes
+1007,post,publish,Seventh Article,seventh-article,news,yes
+1008,post,publish,Eighth Article,eighth-article,news,yes
+1009,post,publish,Ninth Article,ninth-article,news,yes
+1010,post,publish,Tenth Article,tenth-article,news,yes
+1011,post,draft,Draft Article,draft-article,news_draft,no
+1012,post,publish,Demo Post,demo-post,demo_content,no
+1013,post,publish,Duplicate Slug Article,first-article,news,yes
+2001,attachment,inherit,photo-a,photo-a,attachment,yes
+2002,attachment,inherit,photo-b,photo-b,attachment,yes
+2003,attachment,inherit,missing,missing,attachment,yes
+2004,attachment,inherit,duplicate,duplicate,attachment,yes

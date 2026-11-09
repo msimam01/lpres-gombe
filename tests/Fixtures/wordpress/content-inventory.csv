@@ -1,0 +1,8 @@
+wp_id,post_type,status,title,slug,classification,in_migration_scope
+5907,post,publish,Gombe L-PRES Trains 67 Farmers,trains-67-farmers,news,yes
+5908,post,draft,Draft Article,draft-article,news_draft,no
+5535,project,publish,Gwalfade Solar Borehole,gwalfade-solar-borehole,project_content,yes
+49,page,publish,About,about,static_page_content,absorb
+22,team,publish,Prof. U.B. Abubakar,prof-u-b-abubakar,team_profile,yes
+77,tribe_events,publish,Organizing 2022 city photography,organizing-2022-city-photography,demo_content,no
+5909,attachment,inherit,photo,photo,attachment,yes

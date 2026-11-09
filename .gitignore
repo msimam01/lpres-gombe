@@ -1,0 +1,36 @@
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/bootstrap/ssr
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+auth.json
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Local agent workspace and workspace-only artefacts
+/.freebuff/
+/serve.log
+/vite.log
+/tsconfig.tsbuildinfo
+/tmp-placeholder
+
+# Raw WordPress export bundle (~1.2 GB of original media); kept locally only
+/docs/lpres-design-references/
+/storage/serve.log

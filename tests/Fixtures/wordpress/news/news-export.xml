@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+	<title>Gombe State L-PRES</title>
+	<link>https://example.test</link>
+	<description>News importer fixture</description>
+	<language>en-US</language>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	<wp:base_site_url>https://example.test</wp:base_site_url>
+	<wp:base_blog_url>https://example.test</wp:base_blog_url>
+
+	<wp:author>
+		<wp:author_id>1</wp:author_id>
+		<wp:author_login><![CDATA[admin]]></wp:author_login>
+		<wp:author_email><![CDATA[admin@example.test]]></wp:author_email>
+		<wp:author_display_name><![CDATA[Administrator]]></wp:author_display_name>
+	</wp:author>
+
+	<wp:category>
+		<wp:term_id>1</wp:term_id>
+		<wp:category_nicename><![CDATA[uncategorized]]></wp:category_nicename>
+		<wp:category_parent><![CDATA[]]></wp:category_parent>
+		<wp:cat_name><![CDATA[Uncategorized]]></wp:cat_name>
+	</wp:category>
+	<wp:category>
+		<wp:term_id>21</wp:term_id>
+		<wp:category_nicename><![CDATA[latest-news]]></wp:category_nicename>
+		<wp:category_parent><![CDATA[]]></wp:category_parent>
+		<wp:cat_name><![CDATA[Latest News]]></wp:cat_name>
+	</wp:category>
+	<wp:category>
+		<wp:term_id>67</wp:term_id>
+		<wp:category_nicename><![CDATA[news]]></wp:category_nicename>
+		<wp:category_parent><![CDATA[]]></wp:category_parent>
+		<wp:cat_name><![CDATA[News]]></wp:cat_name>
+	</wp:category>
+
+	<item>
+		<title><![CDATA[First Article]]></title>
+		<link>https://example.test/first-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<h2>First Article</h2><p>Para one &amp; a half.</p><p>Para two&nbsp;here.</p><ul><li>Feed</li><li>Fodder</li></ul><p>Read <a href="https://example.test/one">the note</a>.<br>Thank you.</p><img src="https://example.test/wp-content/uploads/2025/03/photo-b.jpg" alt=""><script>tracker()</script><style>.x{display:none}</style>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1001</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-01 08:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-01 08:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[first-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="latest-news"><![CDATA[Latest News]]></category>
+		<category domain="category" nicename="news"><![CDATA[News]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[2001]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+
+	<item>
+		<title><![CDATA[Second Article]]></title>
+		<link>https://example.test/second-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body two.</p><img src="https://example.test/wp-content/uploads/2025/03/photo-b-1024x682.jpg" alt=""><img src="https://example.test/wp-content/uploads/2025/03/duplicate.jpg" alt="">]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1002</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-02 09:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-02 09:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[second-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="uncategorized"><![CDATA[Uncategorized]]></category>
+	</item>
+
+	<item>
+		<title><![CDATA[Third Article]]></title>
+		<link>https://example.test/third-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body three.</p><img src="https://example.test/wp-content/uploads/2025/03/photo-a.jpg" alt="">]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1003</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-03 10:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-03 10:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[third-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="latest-news"><![CDATA[Latest News]]></category>
+		<wp:postmeta>
+			<wp:meta_key><![CDATA[_thumbnail_id]]></wp:meta_key>
+			<wp:meta_value><![CDATA[2001]]></wp:meta_value>
+		</wp:postmeta>
+	</item>
+
+	<item>
+		<title><![CDATA[Fourth Article]]></title>
+		<link>https://example.test/fourth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<h2>Fourth Article</h2><p>Body four.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1004</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-04 11:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-04 11:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[fourth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Fifth Article]]></title>
+		<link>https://example.test/fifth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[Fifth ArticleThis body begins immediately after the title. It has a second sentence. And a third one, long enough that the opening is unmistakably the headline.]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1005</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-05 12:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-05 12:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[fifth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Sixth Article]]></title>
+		<link>https://example.test/sixth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>See the picture.</p><img src="https://example.test/wp-content/uploads/2025/03/missing.jpg" alt="">]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1006</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-06 13:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-06 13:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[sixth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Seventh Article]]></title>
+		<link>https://example.test/seventh-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p> </p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1007</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-07 14:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-07 14:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[seventh-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Eighth Article]]></title>
+		<link>https://example.test/eighth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body eight.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1008</wp:post_id>
+		<wp:post_modified><![CDATA[2025-03-08 15:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[eighth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Ninth Article]]></title>
+		<link>https://example.test/ninth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body nine.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1009</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-09 16:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-09 16:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[ninth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Tenth Article]]></title>
+		<link>https://example.test/tenth-article/</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body ten.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1010</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-10 17:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-10 17:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[tenth-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="latest-news"><![CDATA[Latest News]]></category>
+	</item>
+
+	<item>
+		<title><![CDATA[Draft Article]]></title>
+		<link>https://example.test/?p=1011</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Unpublished.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1011</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-11 18:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-11 18:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[draft-article]]></wp:post_name>
+		<wp:status><![CDATA[draft]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Demo Post]]></title>
+		<link>https://example.test/?p=1012</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Theme demo content.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1012</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-12 19:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-12 19:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[demo-post]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[Duplicate Slug Article]]></title>
+		<link>https://example.test/?p=1013</link>
+		<dc:creator><![CDATA[admin]]></dc:creator>
+		<content:encoded><![CDATA[<p>Body thirteen.</p>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>1013</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-13 20:00:00]]></wp:post_date>
+		<wp:post_modified><![CDATA[2025-03-13 20:00:00]]></wp:post_modified>
+		<wp:post_name><![CDATA[first-article]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+	</item>
+
+	<item>
+		<title><![CDATA[photo-a]]></title>
+		<link>https://example.test/first-article/photo-a/</link>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>2001</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-01 08:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[photo-a]]></wp:post_name>
+		<wp:status><![CDATA[inherit]]></wp:status>
+		<wp:post_type><![CDATA[attachment]]></wp:post_type>
+		<wp:attachment_url><![CDATA[https://example.test/wp-content/uploads/2025/03/photo-a.jpg]]></wp:attachment_url>
+	</item>
+
+	<item>
+		<title><![CDATA[photo-b]]></title>
+		<link>https://example.test/first-article/photo-b/</link>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>2002</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-01 08:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[photo-b]]></wp:post_name>
+		<wp:status><![CDATA[inherit]]></wp:status>
+		<wp:post_type><![CDATA[attachment]]></wp:post_type>
+		<wp:attachment_url><![CDATA[https://example.test/wp-content/uploads/2025/03/photo-b.jpg]]></wp:attachment_url>
+	</item>
+
+	<item>
+		<title><![CDATA[missing]]></title>
+		<link>https://example.test/sixth-article/missing/</link>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>2003</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-06 13:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[missing]]></wp:post_name>
+		<wp:status><![CDATA[inherit]]></wp:status>
+		<wp:post_type><![CDATA[attachment]]></wp:post_type>
+		<wp:attachment_url><![CDATA[https://example.test/wp-content/uploads/2025/03/missing.jpg]]></wp:attachment_url>
+	</item>
+
+	<item>
+		<title><![CDATA[duplicate]]></title>
+		<link>https://example.test/second-article/duplicate/</link>
+		<content:encoded><![CDATA[]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>2004</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-02 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[duplicate]]></wp:post_name>
+		<wp:status><![CDATA[inherit]]></wp:status>
+		<wp:post_type><![CDATA[attachment]]></wp:post_type>
+		<wp:attachment_url><![CDATA[https://example.test/wp-content/uploads/2025/03/duplicate.jpg]]></wp:attachment_url>
+	</item>
+</channel>
+</rss>
