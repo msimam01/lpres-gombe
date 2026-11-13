@@ -293,13 +293,13 @@ it('keeps the imported photograph when an administrator edits without uploading 
     $member = TeamMember::query()->where('slug', 'alpha-member')->firstOrFail();
     $originalPhoto = $member->photograph_path;
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->get('/admin/team/'.$member->id.'/edit')
         ->assertOk();
 
     // The form omits the file input when nothing is picked, exactly like the
     // real edit screen; the stored photograph must survive the update.
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->put('/admin/team/'.$member->id, [
             'name' => 'Alpha Member Updated',
             'designation' => 'Updated Role',

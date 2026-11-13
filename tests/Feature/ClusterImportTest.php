@@ -395,13 +395,13 @@ it('keeps the chart and beneficiary rows when an administrator saves an unchange
     $chart = $cluster->image_path;
     $rows = $cluster->beneficiaries()->get(['lga', 'ward', 'beneficiaries', 'sort_index'])->toArray();
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->get('/admin/clusters/'.$cluster->id.'/edit')
         ->assertOk();
 
     // The edit screen submits the existing rows; saving must not delete them
     // or drop the stored chart when no new file is uploaded.
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->put('/admin/clusters/'.$cluster->id, [
             'name' => $cluster->name,
             'status' => 'published',

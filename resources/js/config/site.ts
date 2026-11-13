@@ -138,30 +138,13 @@ export const welcomeNote = {
     ] as string[],
 };
 
+/**
+ * Section copy only: the component records themselves (title, description,
+ * image, order, visibility) are managed in the admin panel.
+ */
 export const projectComponents = {
     eyebrow: 'L-PRES Project',
     heading: 'Components',
-    image: '/images/lpres/project-components.jpg',
-    imageAlt: 'Poultry at a Gombe State L-PRES project site',
-    width: 1200,
-    height: 803,
-    items: [
-        {
-            id: 'institutional-and-innovation-system-strengthening',
-            number: 1,
-            title: 'Institutional and Innovation System Strengthening',
-        },
-        {
-            id: 'livestock-value-chain-enhancement',
-            number: 2,
-            title: 'Livestock Value Chain Enhancement',
-        },
-        {
-            id: 'crisis-prevention-and-management',
-            number: 3,
-            title: 'Crisis Prevention and Management, Conflict Mitigation, Peace-Building, Environment and Coordination',
-        },
-    ],
 };
 
 export const pdoSection = {

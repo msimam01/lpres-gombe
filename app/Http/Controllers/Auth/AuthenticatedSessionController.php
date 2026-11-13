@@ -33,7 +33,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Administrators keep the dashboard as their landing page; ordinary
+        // users are sent to the public site instead of a forbidden panel.
+        return redirect()->intended(
+            route($request->user()?->is_admin ? 'dashboard' : 'home', absolute: false)
+        );
     }
 
     /**

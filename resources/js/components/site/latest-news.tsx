@@ -59,16 +59,18 @@ export default function LatestNews({ articles, showViewMore = true }: LatestNews
                                             href={article.href}
                                             className="focus-visible:outline-lpres-green block focus-visible:outline-2 focus-visible:outline-offset-4"
                                         >
-                                            <div className="mx-[30px] overflow-hidden">
+                                            {/* Whole photograph, never cropped: the
+                                                fixed-height frame is tinted. */}
+                                            <div className="mx-[30px] overflow-hidden bg-[#eef3f4]">
                                                 {article.image ? (
                                                     <img
                                                         src={article.image}
-                                                        alt=""
+                                                        alt={article.title}
                                                         width={465}
                                                         height={375}
                                                         loading="lazy"
                                                         decoding="async"
-                                                        className="mt-[-121px] h-[375px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                                                        className="mt-[-121px] h-[375px] w-full object-contain"
                                                     />
                                                 ) : (
                                                     <div

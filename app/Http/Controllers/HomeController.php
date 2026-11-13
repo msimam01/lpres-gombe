@@ -26,11 +26,15 @@ class HomeController extends Controller
 
         return Inertia::render('home', [
             'dashboardComponents' => ProjectComponent::published()
-                ->get(['id', 'title', 'description', 'image_path'])
+                ->get(['id', 'title', 'slug', 'description', 'image_path'])
                 ->map(fn (ProjectComponent $component) => [
                     'id' => $component->id,
                     'title' => $component->title,
+                    'href' => route('project-components.show', $component->slug),
                     'description' => $component->description,
+                    'excerpt' => $component->description
+                        ? Str::words(strip_tags($component->description), 26, '…')
+                        : null,
                     'image' => $component->image_path ? asset('storage/'.$component->image_path) : null,
                 ])
                 ->all(),

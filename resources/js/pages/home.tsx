@@ -35,7 +35,7 @@ interface HomeProps {
 export default function Home({ dashboardComponents, latestNews, homeProjects, upcomingEvents, contact }: HomeProps) {
     return (
         <>
-            <Head title="Gombe State L-PRES — Home">
+            <Head title="Home">
                 <meta
                     name="description"
                     content="Gombe State Livestock Productivity and Resilience Support Project (L-PRES) — improving livestock productivity, resilience and commercialisation in Gombe State."

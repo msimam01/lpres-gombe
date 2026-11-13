@@ -28,7 +28,9 @@ interface PublicPageProps {
 export default function PublicPage({ title, description, breadcrumbs, eyebrow, children }: PublicPageProps) {
     return (
         <>
-            <Head title={`Gombe State L-PRES — ${title}`}>
+            {/* The app-level template appends "| Gombe State L-PRES"; the page
+                supplies only its own title so it is never doubled. */}
+            <Head title={title}>
                 {description && <meta name="description" content={description} />}
                 <meta name="theme-color" content="#003b49" />
             </Head>
@@ -37,7 +39,7 @@ export default function PublicPage({ title, description, breadcrumbs, eyebrow, c
                 <SiteHeader />
 
                 <main id="main-content" className="grow">
-                    <SiteBanner title={title} breadcrumbs={breadcrumbs} eyebrow={eyebrow} />
+                    <SiteBanner title={title} breadcrumbs={breadcrumbs} eyebrow={eyebrow} lead={description} />
 
                     <div className="mx-auto w-full max-w-[1200px] px-5 py-12 sm:px-6 lg:px-0">{children}</div>
                 </main>

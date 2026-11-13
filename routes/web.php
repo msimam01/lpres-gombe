@@ -7,7 +7,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsletterSubscriberController;
+use App\Http\Controllers\ProjectComponentController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectMapDataController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ValueChainClusterController;
 use App\Http\Controllers\VisualReportController;
@@ -30,7 +32,13 @@ Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+// Homepage project components, one stable slug-based page each. Kept on its
+// own prefix so it can never shadow /projects/{slug} or /our-projects.
+Route::get('/project-components/{component:slug}', [ProjectComponentController::class, 'show'])
+    ->name('project-components.show');
+
 Route::get('/our-projects', [ProjectController::class, 'index'])->name('our-projects');
+Route::get('/our-projects/map-data', ProjectMapDataController::class)->name('our-projects.map-data');
 Route::get('/projects/{project:slug}', [ProjectController::class, 'show'])->name('projects.show');
 Route::get('/value-chains', [ValueChainClusterController::class, 'index'])->name('value-chains.index');
 Route::get('/value-chains/{cluster:slug}', [ValueChainClusterController::class, 'show'])->name('value-chains.show');
@@ -40,7 +48,7 @@ Route::get('/visual-reports', [VisualReportController::class, 'index'])->name('v
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/newsletter/subscribe', [NewsletterSubscriberController::class, 'store'])->name('newsletter.subscribe');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
     Route::name('admin.')->prefix('admin')->group(function () {

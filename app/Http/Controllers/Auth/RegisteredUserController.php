@@ -47,6 +47,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        // New accounts are ordinary users; administrators land in the panel.
+        return to_route($user->is_admin ? 'dashboard' : 'home');
     }
 }

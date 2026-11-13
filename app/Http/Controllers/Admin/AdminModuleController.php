@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,6 +29,15 @@ abstract class AdminModuleController extends Controller
         'document' => 'file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
         'video' => 'file|mimes:mp4,webm|max:102400',
     ];
+
+    /**
+     * Defence in depth: even if a future route forgot the `admin` middleware,
+     * the generic CRUD controller refuses non-administrators.
+     */
+    public function __construct()
+    {
+        Gate::authorize('manage-content');
+    }
 
     abstract protected function config(): ModuleConfig;
 
@@ -60,6 +70,7 @@ abstract class AdminModuleController extends Controller
         return Inertia::render('admin/resource/form', [
             'module' => $config->toFrontend(),
             'record' => $this->emptyRecord($config),
+            'map' => config('lpres.admin_map'),
         ]);
     }
 
@@ -87,6 +98,7 @@ abstract class AdminModuleController extends Controller
         return Inertia::render('admin/resource/form', [
             'module' => $config->toFrontend(),
             'record' => $record->only($config->fillableKeys()) + ['id' => $record->id],
+            'map' => config('lpres.admin_map'),
         ]);
     }
 
@@ -141,8 +153,17 @@ abstract class AdminModuleController extends Controller
         foreach ($config->fields as $field) {
             $required = ($field['required'] ?? false) ? 'required' : 'nullable';
 
+            // Composite UI widgets have no column of their own: the location
+            // picker writes latitude/longitude, which modules validate through
+            // additionalValidationRules().
+            if ($field['type'] === 'location') {
+                unset($rules[$field['key']]);
+
+                continue;
+            }
+
             $rules[$field['key']] = match ($field['type']) {
-                'text' => [$required, 'string', 'max:255'],
+                'text' => [$required, 'string', 'max:'.($field['max'] ?? 255)],
                 'textarea' => [$required, 'string'],
                 'select' => [$required, 'string', Rule::in(array_keys($field['options'] ?? []))],
                 'boolean' => ['sometimes', 'boolean'],
@@ -180,7 +201,18 @@ abstract class AdminModuleController extends Controller
             }
         }
 
-        return $rules;
+        return array_merge($rules, $this->additionalValidationRules());
+    }
+
+    /**
+     * Rules for columns that are edited by a composite widget rather than a
+     * plain configured field (e.g. project latitude/longitude).
+     *
+     * @return array<string, mixed>
+     */
+    protected function additionalValidationRules(): array
+    {
+        return [];
     }
 
     protected function validatePayload(Request $request, ModuleConfig $config, ?int $ignoreId = null): array
@@ -194,7 +226,17 @@ abstract class AdminModuleController extends Controller
                 && ($field['required'] ?? false) === false
                 && isset($validated[$field['key']])
                 && $validated[$field['key']] === '') {
-                $validated[$field['key']] = null;
+                // A module may declare a safe default (e.g. "hidden" location
+                // visibility) instead of the empty value meaning null.
+                $validated[$field['key']] = $field['default'] ?? null;
+            }
+        }
+
+        // Empty coordinate inputs mean "not recorded", never an empty string
+        // in a decimal column.
+        foreach ($config->extraKeys as $key) {
+            if (array_key_exists($key, $validated) && $validated[$key] === '') {
+                $validated[$key] = null;
             }
         }
 
@@ -420,17 +462,23 @@ abstract class AdminModuleController extends Controller
 
     protected function emptyRecord(ModuleConfig $config): array
     {
-        return collect($config->fields)->mapWithKeys(
+        $record = collect($config->fields)->mapWithKeys(
             fn (array $f) => [
                 $f['key'] => match ($f['type']) {
                     'boolean' => false,
                     'integer' => 0,
                     // Optional selects (e.g. "no category yet") stay empty on create;
                     // required selects default to their first real option.
-                    'select' => ($f['required'] ?? false) ? array_key_first($f['options'] ?? []) : '',
+                    'select' => ($f['required'] ?? false) ? array_key_first($f['options'] ?? []) : ($f['default'] ?? ''),
                     default => $f['default'] ?? '',
                 },
             ]
         )->all();
+
+        foreach ($config->extraKeys as $key) {
+            $record[$key] = '';
+        }
+
+        return $record;
     }
 }

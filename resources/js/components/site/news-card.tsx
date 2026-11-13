@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Newspaper } from 'lucide-react';
 
 import type { LatestNewsItem } from '@/components/site/latest-news';
 
@@ -16,8 +16,8 @@ export default function NewsCard({ article }: { article: LatestNewsItem }) {
             href={article.href}
             className="group block h-full bg-[#f1f5f6] text-center no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)]"
         >
-            <div className="relative overflow-hidden">
-                <span className="bg-lpres-green absolute top-[15px] right-[20px] z-10 block px-[11px] pt-[3px] pb-[10px] text-xs font-extrabold text-white after:absolute after:top-full after:right-0 after:border-t-[10px] after:border-r-[10px] after:border-t-transparent after:border-r-lpres-green">
+            <div className="relative overflow-hidden bg-[#eef3f4]">
+                <span className="bg-lpres-green after:border-r-lpres-green absolute top-[15px] right-[20px] z-10 block px-[11px] pt-[3px] pb-[10px] text-xs font-extrabold text-white after:absolute after:top-full after:right-0 after:border-t-[10px] after:border-r-[10px] after:border-t-transparent">
                     {article.dateDay}
                     {article.dateMonth}
                 </span>
@@ -30,10 +30,12 @@ export default function NewsCard({ article }: { article: LatestNewsItem }) {
                         height={375}
                         loading="lazy"
                         decoding="async"
-                        className="block aspect-[465/375] w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                        className="block aspect-[465/375] w-full object-contain"
                     />
                 ) : (
-                    <div className="block aspect-[465/375] w-full bg-lpres-deep" />
+                    <div aria-hidden="true" className="flex aspect-[465/375] w-full items-center justify-center">
+                        <Newspaper className="text-lpres-deep/25 size-12" aria-hidden="true" />
+                    </div>
                 )}
             </div>
 

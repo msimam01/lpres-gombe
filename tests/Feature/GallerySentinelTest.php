@@ -17,7 +17,7 @@ it('saves first-time project gallery uploads sent as sentinel plus files', funct
     $realJpeg = file_get_contents(public_path('images/lpres/lpres-logo.jpeg'));
     $category = ProjectCategory::create(['name' => 'Infrastructure', 'slug' => 'infrastructure']);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.projects.store'), [
             'title' => 'Fodder field expansion',
             'description' => 'New fodder fields across LGAs.',

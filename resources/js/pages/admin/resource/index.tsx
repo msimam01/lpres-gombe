@@ -8,7 +8,19 @@ import { toastError, toastSuccess } from '@/lib/toast';
 export interface AdminField {
     key: string;
     label: string;
-    type: 'text' | 'textarea' | 'select' | 'boolean' | 'integer' | 'date' | 'image' | 'document' | 'video' | 'beneficiary-table' | 'gallery';
+    type:
+        | 'text'
+        | 'textarea'
+        | 'select'
+        | 'boolean'
+        | 'integer'
+        | 'date'
+        | 'image'
+        | 'document'
+        | 'video'
+        | 'beneficiary-table'
+        | 'gallery'
+        | 'location';
     required?: boolean;
     options?: Record<string, string>;
     default?: string;
@@ -19,6 +31,12 @@ export interface AdminField {
     removable?: boolean;
     /** Extra helper line rendered under the field label. */
     help?: string;
+    /** Explicit form section override (e.g. location fields). */
+    section?: 'details' | 'content' | 'media' | 'publishing' | 'location';
+    /** Text fields: maximum length enforced by the server. */
+    max?: number;
+    /** Optional selects: whether to show a blank/None option (default true). */
+    allowEmpty?: boolean;
 }
 
 export interface AdminModule {

@@ -209,7 +209,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             </div>
 
             {showControls && (
-                <div className="absolute top-1/2 right-4 z-20 flex -translate-y-1/2 flex-col gap-2.5 md:top-[58%] md:right-[15px] md:gap-[10px]">
+                <div className="absolute right-4 bottom-16 z-20 flex flex-row gap-2.5 md:top-[58%] md:right-[15px] md:bottom-auto md:-translate-y-1/2 md:flex-col md:gap-[10px]">
                     <button
                         type="button"
                         onClick={goToPreviousSlide}

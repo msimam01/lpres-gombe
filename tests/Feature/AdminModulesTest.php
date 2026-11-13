@@ -18,12 +18,12 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 function admin(): User
 {
-    return User::factory()->create();
+    return User::factory()->admin()->create();
 }
 
 it('requires authentication for the admin dashboard and modules', function () {
     $this->get('/admin/news')->assertRedirect();
-    $this->actingAs(User::factory()->create())->get('/admin/news')->assertOk();
+    $this->actingAs(admin())->get('/admin/news')->assertOk();
 });
 
 it('creates a news record with a generated slug', function () {
@@ -182,6 +182,7 @@ it('uploads multiple project gallery images and retains the featured image on ed
             'description' => 'Expanding fodder production across Gombe State.',
             'project_category_id' => (string) $category->id,
             'featured_image_path' => UploadedFile::fake()->createWithContent('featured.jpg', $realJpeg),
+            'location_visibility' => 'hidden',
             'gallery_gallery_image_paths' => ['', ''],
             'files_gallery_image_paths' => [
                 UploadedFile::fake()->createWithContent('g1.jpg', $realJpeg),
@@ -206,6 +207,7 @@ it('uploads multiple project gallery images and retains the featured image on ed
         'title' => 'Fodder Expansion',
         'description' => 'Updated description.',
         'project_category_id' => (string) $category->id,
+        'location_visibility' => 'hidden',
         'gallery_gallery_image_paths' => $kept,
         'status' => 'published',
     ])->assertRedirect();

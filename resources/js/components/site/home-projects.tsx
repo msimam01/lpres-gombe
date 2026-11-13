@@ -40,23 +40,25 @@ export default function HomeProjects({ projects }: { projects: HomeProjectItem[]
                                 href={project.href}
                                 className="group focus-visible:outline-lpres-green block h-full border border-[#e1e8ea] bg-white no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                             >
-                                <div className="relative overflow-hidden">
+                                {/* Fixed frame, whole image: object-contain with a
+                                    neutral tint behind ratios that differ. */}
+                                <div className="relative overflow-hidden border-b border-[#e1e8ea] bg-[#eef3f4]">
                                     {project.image ? (
                                         <img
                                             src={project.image}
-                                            alt=""
+                                            alt={project.title}
                                             width={465}
                                             height={375}
                                             loading="lazy"
                                             decoding="async"
-                                            className="block aspect-[465/375] w-full object-cover transition-transform duration-700 group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                                            className="block aspect-[465/375] w-full object-contain"
                                         />
                                     ) : (
                                         <div
                                             aria-hidden="true"
-                                            className="bg-lpres-deep flex aspect-[465/375] w-full items-center justify-center"
+                                            className="flex aspect-[465/375] w-full items-center justify-center"
                                         >
-                                            <FolderOpen className="size-12 text-white/30" aria-hidden="true" />
+                                            <FolderOpen className="text-lpres-deep/25 size-12" aria-hidden="true" />
                                         </div>
                                     )}
 

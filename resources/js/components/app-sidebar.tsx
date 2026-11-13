@@ -61,13 +61,13 @@ const mainNavGroups: (NavGroup | NavItem)[] = (() => {
         { title: 'Dashboard', url: '/dashboard', icon: LayoutGrid },
         { title: 'News', url: '/admin/news', icon: Newspaper },
         { title: 'Events', url: '/admin/events', icon: CalendarDays },
-        projects,
         { title: 'Project Components', url: '/admin/project-components', icon: Sigma },
+        projects,
         team,
         { title: 'Value chain clusters', url: '/admin/clusters', icon: Folder },
-        media,
         { title: 'Visual reports', url: '/admin/visual-reports', icon: FileBarChart },
-        { title: 'Contact enquiries', url: '/admin/enquiries', icon: Mail },
+        media,
+        // { title: 'Contact enquiries', url: '/admin/enquiries', icon: Mail },
         { title: 'Settings', url: '/admin/settings', icon: Settings },
     ].map((entry) => ('url' in entry ? flat(entry) : entry));
 })();

@@ -20,6 +20,7 @@ class ModuleConfig
         public int $perPage = 20,
         public ?string $titleFrom = null, // column the slug is generated from
         public ?string $labelFrom = null, // column shown as the record name
+        public array $extraKeys = [],     // persisted columns without a plain form field
     ) {}
 
     public function routeNames(): array
@@ -48,13 +49,17 @@ class ModuleConfig
      */
     public function fillableKeys(): array
     {
-        $keys = collect($this->fields)->pluck('key')->all();
+        // Composite widgets (e.g. the location map) are not columns of their own.
+        $keys = collect($this->fields)
+            ->reject(fn (array $field) => $field['type'] === 'location')
+            ->pluck('key')
+            ->all();
 
         if (in_array('slug', (new $this->model)->getFillable(), true)) {
             $keys[] = 'slug';
         }
 
-        return array_values(array_unique($keys));
+        return array_values(array_unique(array_merge($keys, $this->extraKeys)));
     }
 
     /**

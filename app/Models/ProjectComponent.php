@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProjectComponent extends Model
 {
-    protected $fillable = ['title', 'description', 'image_path', 'display_order', 'status'];
+    protected $fillable = ['title', 'slug', 'description', 'image_path', 'display_order', 'status'];
 
     protected function casts(): array
     {
@@ -19,8 +19,17 @@ class ProjectComponent extends Model
         ];
     }
 
+    /**
+     * Components visible on the public site, in administrator-defined order.
+     * Records without a slug cannot be linked to, so they are never published.
+     */
     public function scopePublished($query)
     {
-        return $query->where('status', true)->orderBy('display_order')->orderBy('id');
+        return $query
+            ->where('status', true)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
+            ->orderBy('display_order')
+            ->orderBy('id');
     }
 }

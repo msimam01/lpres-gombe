@@ -31,7 +31,7 @@ function createCategory(string $type, array $attributes = []): ProjectCategory|T
 }
 
 it('creates and edits a project category without any visibility controls', function () {
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.project-categories.store'), ['name' => 'Livestock'])
         ->assertRedirect();
 
@@ -52,7 +52,7 @@ it('creates and edits a project category without any visibility controls', funct
 });
 
 it('creates team categories independently of team members, without visibility controls', function () {
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.team-categories.store'), ['name' => 'Technical Support Unit']);
 
     expect(TeamCategory::query()->where('slug', 'technical-support-unit')->count())->toBe(1)
@@ -68,7 +68,7 @@ it('blocks deleting a project category that is still assigned to projects', func
         'project_category_id' => $category->id, 'status' => 'published',
     ]);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->delete(route('admin.project-categories.destroy', $category->id))
         // Deletion requires reassignment first; the relationship is never
         // silently discarded.
@@ -87,7 +87,7 @@ it('blocks deleting a team category while members are assigned to it', function 
         'team_category_id' => $category->id, 'status' => true,
     ]);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->delete(route('admin.team-categories.destroy', $category->id))
         ->assertRedirect()
         ->assertSessionHas('error');
@@ -100,7 +100,7 @@ it('stores and reassigns a managed project category from the project form', func
     $dairy = createCategory('project', ['name' => 'Dairy', 'slug' => 'dairy']);
     $poultry = createCategory('project', ['name' => 'Poultry', 'slug' => 'poultry']);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.projects.store'), [
             'title' => 'Feedlot programme',
             'description' => 'Feedlot support.',
@@ -122,7 +122,7 @@ it('stores and reassigns a managed project category from the project form', func
 });
 
 it('rejects unknown category ids on the project form', function () {
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->from(route('admin.projects.create'))
         ->post(route('admin.projects.store'), [
             'title' => 'Bad category',
@@ -137,7 +137,7 @@ it('rejects unknown category ids on the project form', function () {
 it('stores a team member inside a managed team category', function () {
     $category = createCategory('team', ['name' => 'Extension', 'slug' => 'extension']);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.team.store'), [
             'name' => 'Peter Danjuma',
             'team_category_id' => (string) $category->id,
@@ -150,7 +150,7 @@ it('stores a team member inside a managed team category', function () {
 });
 
 it('generates the news excerpt automatically from the title on create and edit', function () {
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.news.store'), [
             'title' => 'L-PRES distributes livestock feed to 500 herders in Gombe',
             'body' => 'Full article body.',
@@ -249,7 +249,7 @@ it('settles projects without any category on the public listing', function () {
         'description' => 'Desc.', 'status' => 'published',
     ]);
 
-    $this->actingAs(User::factory()->create())
+    $this->actingAs(User::factory()->admin()->create())
         ->post(route('admin.projects.store'), [
             'title' => 'Second build', 'description' => 'Desc.', 'status' => 'published',
         ]);

@@ -1,3 +1,4 @@
+import LocationPicker, { type AdminMapConfig, type CoordinatePatch } from '@/components/admin/location-picker';
 import { type AdminField, type AdminModule } from '@/pages/admin/resource/index';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -8,15 +9,28 @@ import { toastFormError } from '@/lib/toast';
 interface ResourceFormProps {
     module: AdminModule;
     record: Record<string, unknown>;
+    map: AdminMapConfig;
 }
 
 /**
  * Which labelled section a field belongs to. The order below matches the
  * natural reading order of the form: details → content → media → publishing.
  */
-const SECTION_LABELS = { details: 'Basic information', content: 'Content', media: 'Media', publishing: 'Publishing' } as const;
+const SECTION_LABELS = {
+    details: 'Basic information',
+    location: 'Location',
+    content: 'Content',
+    media: 'Media',
+    publishing: 'Publishing',
+} as const;
 
 function sectionOf(field: AdminField): keyof typeof SECTION_LABELS {
+    // Modules may place a field in an explicit section (e.g. the project
+    // location block) without changing the generic renderer.
+    if (field.section) {
+        return field.section;
+    }
+
     // Category selects carry the "Manage …" affordance and belong with the
     // record's basic details, not with the publishing controls.
     if (field.type === 'select' && field.manageHref) {
@@ -41,7 +55,7 @@ function sectionOf(field: AdminField): keyof typeof SECTION_LABELS {
     }
 }
 
-const SECTION_ORDER: (keyof typeof SECTION_LABELS)[] = ['details', 'content', 'media', 'publishing'];
+const SECTION_ORDER: (keyof typeof SECTION_LABELS)[] = ['details', 'location', 'content', 'media', 'publishing'];
 
 /** Full width even on the two-column grid. */
 const FULL_WIDTH_TYPES = new Set<AdminField['type']>(['textarea', 'beneficiary-table', 'gallery']);
@@ -400,6 +414,8 @@ function Field({
                 </h3>
             )}
 
+            {field.help && <p className="-mt-1 text-xs text-neutral-500">{field.help}</p>}
+
             {field.type === 'textarea' && (
                 <textarea
                     id={`field-${field.key}`}
@@ -418,7 +434,7 @@ function Field({
                         onChange={(e) => onChanges(field.key, e.target.value)}
                         className={common}
                     >
-                        {!field.required && (
+                        {!field.required && field.allowEmpty !== false && (
                             <option value="">— {field.manageLabel ? 'No category yet' : 'None'} —</option>
                         )}
                         {field.options &&
@@ -489,7 +505,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
     );
 }
 
-export default function ResourceForm({ module, record }: ResourceFormProps) {
+export default function ResourceForm({ module, record, map }: ResourceFormProps) {
     const isCreate = record.id === undefined || record.id === null;
     const routeBase = module.routeBase;
     // Media modules use a slash route path (e.g. media/images) but dotted route names.
@@ -578,16 +594,30 @@ export default function ResourceForm({ module, record }: ResourceFormProps) {
                 <form onSubmit={submit} className="flex flex-col gap-4" noValidate>
                     {sections.map((section) => (
                         <Section key={section.key} title={section.title}>
-                            {section.fields.map((field) => (
-                                <Field
-                                    key={field.key}
-                                    field={field}
-                                    value={form.data[field.key]}
-                                    onChanges={(key, value) => form.setData(key, value as FormDataConvertible)}
-                                    error={form.errors[field.key]}
-                                    fullWidth={FULL_WIDTH_TYPES.has(field.type)}
-                                />
-                            ))}
+                            {section.fields.map((field) =>
+                                field.type === 'location' ? (
+                                    <div key={field.key} className="grid gap-2 md:col-span-2">
+                                        <h3 className="text-sm font-medium">{field.label}</h3>
+                                        {field.help && <p className="text-xs text-neutral-500">{field.help}</p>}
+                                        <LocationPicker
+                                            latitude={form.data.latitude}
+                                            longitude={form.data.longitude}
+                                            onChange={(patch: CoordinatePatch) => form.setData({ ...form.data, ...patch })}
+                                            errors={{ latitude: form.errors.latitude, longitude: form.errors.longitude }}
+                                            map={map}
+                                        />
+                                    </div>
+                                ) : (
+                                    <Field
+                                        key={field.key}
+                                        field={field}
+                                        value={form.data[field.key]}
+                                        onChanges={(key, value) => form.setData(key, value as FormDataConvertible)}
+                                        error={form.errors[field.key]}
+                                        fullWidth={FULL_WIDTH_TYPES.has(field.type)}
+                                    />
+                                ),
+                            )}
                         </Section>
                     ))}
 

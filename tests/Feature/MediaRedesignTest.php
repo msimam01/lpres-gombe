@@ -11,7 +11,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 function mediaAdmin(): User
 {
-    return User::factory()->create();
+    return User::factory()->admin()->create();
 }
 
 function realJpeg(): string
