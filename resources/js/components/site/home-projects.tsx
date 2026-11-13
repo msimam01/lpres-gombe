@@ -40,8 +40,7 @@ export default function HomeProjects({ projects }: { projects: HomeProjectItem[]
                                 href={project.href}
                                 className="group focus-visible:outline-lpres-green block h-full border border-[#e1e8ea] bg-white no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                             >
-                                {/* Fixed frame, whole image: object-contain with a
-                                    neutral tint behind ratios that differ. */}
+                                {/* Uniform 465/375 frame, fully covered by the photo. */}
                                 <div className="relative overflow-hidden border-b border-[#e1e8ea] bg-[#eef3f4]">
                                     {project.image ? (
                                         <img
@@ -51,7 +50,7 @@ export default function HomeProjects({ projects }: { projects: HomeProjectItem[]
                                             height={375}
                                             loading="lazy"
                                             decoding="async"
-                                            className="block aspect-[465/375] w-full object-contain"
+                                            className="block aspect-[465/375] w-full object-cover"
                                         />
                                     ) : (
                                         <div

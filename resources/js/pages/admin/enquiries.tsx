@@ -1,3 +1,4 @@
+import { useConfirmDelete } from '@/components/confirm-delete-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
@@ -25,14 +26,18 @@ interface EnquiriesProps {
 }
 
 export default function Enquiries({ enquiries }: EnquiriesProps) {
+    const { confirmDelete, deleteDialog } = useConfirmDelete();
+
     const toggle = (id: number) => {
         router.post(route('admin.enquiries.toggle', id), {}, { preserveScroll: true });
     };
 
     const destroy = (enquiry: Enquiry) => {
-        if (window.confirm(`Delete the enquiry from "${enquiry.name}"?`)) {
-            router.delete(route('admin.enquiries.destroy', enquiry.id), { preserveScroll: true });
-        }
+        confirmDelete(
+            `Enquiry from ${enquiry.name}`,
+            () => router.delete(route('admin.enquiries.destroy', enquiry.id), { preserveScroll: true }),
+            'Delete enquiry?',
+        );
     };
 
     return (
@@ -96,9 +101,11 @@ export default function Enquiries({ enquiries }: EnquiriesProps) {
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
                             ) : null,
-                        )}
-                    </nav>
-                )}
+                                            )}
+                </nav>
+            )}
+
+                {deleteDialog}
             </div>
         </AppLayout>
     );

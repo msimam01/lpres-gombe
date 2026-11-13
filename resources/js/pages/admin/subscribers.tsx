@@ -1,3 +1,4 @@
+import { useConfirmDelete } from '@/components/confirm-delete-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
@@ -15,10 +16,14 @@ interface Subscriber {
 }
 
 export default function Subscribers({ subscribers }: { subscribers: { data: Subscriber[] } }) {
+    const { confirmDelete, deleteDialog } = useConfirmDelete();
+
     const remove = (subscriber: Subscriber) => {
-        if (window.confirm(`Remove ${subscriber.email}?`)) {
-            router.delete(route('admin.subscribers.destroy', subscriber.id), { preserveScroll: true });
-        }
+        confirmDelete(
+            subscriber.email,
+            () => router.delete(route('admin.subscribers.destroy', subscriber.id), { preserveScroll: true }),
+            'Remove subscriber?',
+        );
     };
 
     return (
@@ -48,6 +53,8 @@ export default function Subscribers({ subscribers }: { subscribers: { data: Subs
                         </li>
                     )}
                 </ul>
+
+                {deleteDialog}
             </div>
         </AppLayout>
     );

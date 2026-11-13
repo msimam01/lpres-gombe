@@ -61,8 +61,32 @@ export const siteNavigation: SiteNavLink[] = [
     },
     { label: 'News', href: '/news' },
     { label: 'Events', href: '/events' },
+    { label: 'Documents', href: '/our-documents' },
     { label: 'Contact Us', href: '/contact' },
 ];
+
+export interface NavClusterLink {
+    label: string;
+    href: string;
+}
+
+/**
+ * The navigation tree with the Value Chain Clusters dropdown built from the
+ * published clusters supplied by Laravel, so newly created clusters show up
+ * automatically. The static children remain the fallback when none are
+ * published.
+ */
+export function navigationWithClusters(clusters: NavClusterLink[]): SiteNavLink[] {
+    if (clusters.length === 0) {
+        return siteNavigation;
+    }
+
+    return siteNavigation.map((item) =>
+        item.href === '/value-chains'
+            ? { ...item, children: clusters.map((cluster) => ({ label: cluster.label, href: cluster.href })) }
+            : item,
+    );
+}
 
 export interface HeroSlide {
     id: string;

@@ -1,7 +1,9 @@
 import { Link } from '@inertiajs/react';
+import { useState } from 'react';
 
 import AssociatedMedia from '@/components/site/associated-media';
 import ImageGallery from '@/components/site/image-gallery';
+import ImageLightbox from '@/components/site/image-lightbox';
 import PublicPage from '@/layouts/public-page';
 
 interface ArticleItem {
@@ -28,6 +30,19 @@ interface NewsShowProps {
 }
 
 export default function NewsShow({ article, moreNews, mediaGalleries, mediaVideos, mediaImages }: NewsShowProps) {
+    // Featured photograph first, then every supporting image: the viewer pages
+    // through all of them in one sequence.
+    const galleryImages = article.gallery.map((src, index) => ({
+        src,
+        alt: `${article.title} — image ${index + 1}`,
+    }));
+    const images = [
+        ...(article.image ? [{ src: article.image, alt: article.title, caption: article.title }] : []),
+        ...galleryImages,
+    ];
+    const galleryOffset = article.image ? 1 : 0;
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
     return (
         <PublicPage
             title={article.title}
@@ -36,7 +51,22 @@ export default function NewsShow({ article, moreNews, mediaGalleries, mediaVideo
         >
             <article className="bg-white">
                 {article.image && (
-                    <img src={article.image} alt={article.title} width={1200} height={675} className="mb-8 block w-full object-cover" loading="lazy" decoding="async" />
+                    <button
+                        type="button"
+                        onClick={() => setLightboxIndex(0)}
+                        aria-label="View the featured image full size"
+                        className="focus-visible:outline-lpres-green mb-8 block w-full cursor-zoom-in bg-[#eef3f4] focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                        <img
+                            src={article.image}
+                            alt={article.title}
+                            width={1200}
+                            height={675}
+                            className="block w-full object-contain"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                    </button>
                 )}
 
                 <p className="text-lpres-green text-sm font-bold tracking-[1px] uppercase">{article.published ?? 'Published'}</p>
@@ -54,12 +84,13 @@ export default function NewsShow({ article, moreNews, mediaGalleries, mediaVideo
 
                 {article.gallery.length > 0 && (
                     <section aria-label="Article photo gallery" className="mt-10">
+                        <p className="text-xs font-bold tracking-[1px] text-[#6f7b7e] uppercase">
+                            Select an image to view it larger
+                        </p>
                         <div className="mt-5">
                             <ImageGallery
-                                items={article.gallery.map((src, index) => ({
-                                    src,
-                                    alt: `${article.title} — image ${index + 1}`,
-                                }))}
+                                items={galleryImages}
+                                onSelect={(index) => setLightboxIndex(galleryOffset + index)}
                             />
                         </div>
                     </section>
@@ -88,6 +119,14 @@ export default function NewsShow({ article, moreNews, mediaGalleries, mediaVideo
                         ))}
                     </ul>
                 </section>
+            )}
+            {lightboxIndex !== null && images[lightboxIndex] && (
+                <ImageLightbox
+                    images={images}
+                    index={lightboxIndex}
+                    onClose={() => setLightboxIndex(null)}
+                    onIndexChange={setLightboxIndex}
+                />
             )}
         </PublicPage>
     );

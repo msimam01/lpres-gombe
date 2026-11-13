@@ -39,6 +39,10 @@ class ClusterAdminController extends AdminModuleController
                     'label' => 'Status',
                     'type' => 'select',
                     'options' => ['draft' => 'Draft', 'published' => 'Published'],
+                    // New clusters publish immediately so they appear in the
+                    // header navigation and on /value-chains; staff can still
+                    // switch a cluster back to Draft.
+                    'default' => 'published',
                 ],
             ],
         );
@@ -69,6 +73,13 @@ class ClusterAdminController extends AdminModuleController
         $record = DB::transaction(function () use ($request, $config, $validated) {
             $data = $this->validatePayload($request, $config);
             $data = $this->applySlug($config, $data);
+
+            // A new cluster is published unless the form explicitly asks for a
+            // draft, so it appears in the header navigation straight away. An
+            // explicit "Draft" choice is still honoured.
+            if (blank($data['status'] ?? null)) {
+                $data['status'] = 'published';
+            }
 
             $record = ValueChainCluster::create($data);
             $this->storeFiles($request, $config, $record);

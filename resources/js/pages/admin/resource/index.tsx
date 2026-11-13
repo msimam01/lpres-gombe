@@ -1,3 +1,4 @@
+import { useConfirmDelete } from '@/components/confirm-delete-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
@@ -84,6 +85,7 @@ function statusBadge(status: string | boolean) {
 }
 
 export default function ResourceIndex({ module, rows }: ResourceIndexProps) {
+    const { confirmDelete, deleteDialog } = useConfirmDelete();
     const page = usePage();
     const successMessage = page.props.success as string | undefined;
     const [search, setSearch] = useState('');
@@ -114,13 +116,16 @@ export default function ResourceIndex({ module, rows }: ResourceIndexProps) {
     };
 
     const destroy = (row: AdminRow) => {
-        if (window.confirm(`Delete "${row.label}"? This cannot be undone.`)) {
-            router.delete(route(`admin.${routeName}.destroy`, row.id), {
-                preserveScroll: true,
-                onSuccess: () => toastSuccess(`${module.label} deleted.`),
-                onError: () => toastError(`${module.label} could not be deleted.`),
-            });
-        }
+        confirmDelete(
+            row.label,
+            () =>
+                router.delete(route(`admin.${routeName}.destroy`, row.id), {
+                    preserveScroll: true,
+                    onSuccess: () => toastSuccess(`${module.label} deleted.`),
+                    onError: () => toastError(`${module.label} could not be deleted.`),
+                }),
+            `Delete ${module.label.toLowerCase()}?`,
+        );
     };
 
     const showStatus = module.hasStatus ?? true;
@@ -272,6 +277,8 @@ export default function ResourceIndex({ module, rows }: ResourceIndexProps) {
                         {successMessage}
                     </p>
                 )}
+
+                {deleteDialog}
             </div>
         </AppLayout>
     );

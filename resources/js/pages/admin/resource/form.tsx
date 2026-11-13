@@ -204,7 +204,7 @@ function FileField({
                         field.type === 'image'
                             ? 'image/jpeg,image/png,image/webp'
                             : field.type === 'document'
-                              ? '.pdf,.doc,.docx,.xls,.xlsx'
+                              ? '.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx'
                               : 'video/mp4,video/webm'
                     }
                     onChange={(e) => {

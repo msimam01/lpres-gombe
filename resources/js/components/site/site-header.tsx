@@ -25,7 +25,7 @@ export default function SiteHeader() {
     }, []);
 
     return (
-        <header className={`bg-lpres-mist sticky top-0 z-40 w-full shadow-sm transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
+        <header className={`bg-lpres-mist sticky top-0 z-50 w-full shadow-sm transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
             <div className={`flex w-full items-center justify-between transition-[height] duration-300 ${scrolled ? 'h-[76px]' : 'h-[136px]'}`}>
                 <Link
                     href="/"

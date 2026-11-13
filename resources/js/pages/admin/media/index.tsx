@@ -1,3 +1,4 @@
+import { useConfirmDelete } from '@/components/confirm-delete-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
@@ -74,6 +75,8 @@ function Paginator({ links }: { links: { url: string | null; label: string; acti
  * galleries, each linking into its dedicated module workflow.
  */
 export default function MediaIndex({ media, mediaLinks, mediaLastPage, galleries, galleryLinks, galleryLastPage }: MediaIndexProps) {
+    const { confirmDelete, deleteDialog } = useConfirmDelete();
+
     const toggleItem = (row: MediaModuleRow) => {
         router.post(
             route(`admin.media.${row.type === 'video' ? 'videos' : 'images'}.toggle`, row.id),
@@ -99,26 +102,29 @@ export default function MediaIndex({ media, mediaLinks, mediaLastPage, galleries
     };
 
     const deleteGallery = (row: GalleryRow) => {
-        if (window.confirm(`Delete gallery "${row.label}"? This cannot be undone.`)) {
-            router.delete(route('admin.media.galleries.destroy', row.id), {
-                preserveScroll: true,
-                onSuccess: () => actionSuccess('Gallery deleted.'),
-                onError: () => toastError('Gallery could not be deleted.'),
-            });
-        }
+        confirmDelete(
+            row.label,
+            () =>
+                router.delete(route('admin.media.galleries.destroy', row.id), {
+                    preserveScroll: true,
+                    onSuccess: () => actionSuccess('Gallery deleted.'),
+                    onError: () => toastError('Gallery could not be deleted.'),
+                }),
+            'Delete gallery?',
+        );
     };
 
     const deleteItem = (row: MediaModuleRow) => {
-        if (window.confirm(`Delete "${row.label}"? This cannot be undone.`)) {
-            router.delete(
-                route(`admin.media.${row.type === 'video' ? 'videos' : 'images'}.destroy`, row.id),
-                {
+        confirmDelete(
+            row.label,
+            () =>
+                router.delete(route(`admin.media.${row.type === 'video' ? 'videos' : 'images'}.destroy`, row.id), {
                     preserveScroll: true,
                     onSuccess: () => actionSuccess('Media item deleted.'),
                     onError: () => toastError('Media item could not be deleted.'),
-                },
-            );
-        }
+                }),
+            `Delete ${row.type}?`,
+        );
     };
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -252,6 +258,8 @@ export default function MediaIndex({ media, mediaLinks, mediaLastPage, galleries
                     </table>
                     {galleryLastPage > 1 && <Paginator links={galleryLinks} />}
                 </section>
+
+                {deleteDialog}
             </div>
         </AppLayout>
     );

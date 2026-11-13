@@ -2,8 +2,9 @@ import { Link, usePage } from '@inertiajs/react';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
-import { siteNavigation } from '@/config/site';
+import { navigationWithClusters } from '@/config/site';
 import { cn } from '@/lib/utils';
+import type { SharedData } from '@/types';
 
 /**
  * Desktop navigation row: every top-level public link is directly visible,
@@ -13,29 +14,45 @@ import { cn } from '@/lib/utils';
  * hamburger menu. Keyboard users can reach and open the submenus with focus.
  */
 export default function SiteNav({ className }: { className?: string }) {
-    const { url } = usePage();
+    const { url, props } = usePage<SharedData>();
     const pathname = url.split('?')[0];
     const [openLabel, setOpenLabel] = useState<string | null>(null);
+    // Clusters come from Laravel, so admin-created clusters appear here.
+    const navigation = navigationWithClusters(props.navClusters ?? []);
 
     const isActive = (href: string) =>
         href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
 
     return (
         <nav aria-label="Primary" className={className}>
-            <ul className="flex list-none items-center gap-3 2xl:gap-4" onMouseLeave={() => setOpenLabel(null)}>
-                {siteNavigation.map((item) => {
+            <ul
+                className="flex list-none items-center gap-2 2xl:gap-4"
+                onMouseLeave={() => setOpenLabel(null)}
+                onKeyDown={(event) => {
+                    if (event.key === 'Escape') {
+                        setOpenLabel(null);
+                    }
+                }}
+            >
+                {navigation.map((item) => {
                     const hasChildren = Boolean(item.children?.length);
                     const isCurrent = isActive(item.href);
 
                     return (
-                        <li key={item.label} className="relative">
+                        <li
+                            key={item.label}
+                            className="relative"
+                            // Hovering anywhere on the item opens its submenu, so
+                            // visitors do not have to find the small chevron.
+                            onMouseEnter={() => hasChildren && setOpenLabel(item.label)}
+                        >
                             <div className="flex items-center">
                                 <Link
                                     href={item.href}
                                     aria-current={isCurrent ? 'page' : undefined}
                                     aria-haspopup={hasChildren ? 'true' : undefined}
                                     className={cn(
-                                        'max-[1439px]:text-[13px] group inline-flex items-center gap-1 py-2 text-sm leading-[52px] font-bold tracking-[0.3px] whitespace-nowrap uppercase transition-colors focus-visible:outline-none',
+                                        'max-[1535px]:text-[12.5px] group inline-flex items-center gap-1 py-2 text-sm leading-[52px] font-bold tracking-[0.3px] whitespace-nowrap uppercase transition-colors focus-visible:outline-none',
                                         isCurrent
                                             ? 'text-lpres-green'
                                             : 'text-lpres-deep hover:text-lpres-green',
@@ -49,7 +66,6 @@ export default function SiteNav({ className }: { className?: string }) {
                                         aria-expanded={openLabel === item.label}
                                         aria-label={`${isCurrent ? 'Hide' : 'Show'} ${item.label} submenu`}
                                         onClick={() => setOpenLabel(openLabel === item.label ? null : item.label)}
-                                        onMouseEnter={() => setOpenLabel(item.label)}
                                         onFocus={() => setOpenLabel(item.label)}
                                         className="p-1 text-inherit focus-visible:outline-none"
                                     >
@@ -75,7 +91,9 @@ export default function SiteNav({ className }: { className?: string }) {
                             />
 
                             {hasChildren && openLabel === item.label && (
-                                <ul className="absolute top-full left-1/2 z-50 -translate-x-1/2 rounded-sm bg-white py-2 shadow-[0_18px_38px_-14px_rgba(0,59,73,0.4)] ring-1 ring-[#e1e8ea]">
+                                <ul
+                                    className="text-lpres-deep absolute top-full left-1/2 z-[60] max-h-[min(70vh,520px)] w-max -translate-x-1/2 overflow-y-auto rounded-sm border border-[#e1e8ea] bg-white py-2 shadow-[0_18px_38px_-14px_rgba(0,59,73,0.4)]"
+                                >
                                     {item.children?.map((child) => (
                                         <li key={child.label}>
                                             <Link

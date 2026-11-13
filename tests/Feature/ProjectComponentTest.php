@@ -99,8 +99,11 @@ it('returns 404 for hidden, unpublished and unknown components', function () {
         'title' => 'No slug at all', 'slug' => null, 'display_order' => 2, 'status' => true,
     ]);
 
-    $this->get('/project-components/not-yet-public')->assertNotFound();
-    $this->get('/project-components/does-not-exist')->assertNotFound();
+    $this->get('/components/not-yet-public')->assertNotFound();
+    $this->get('/components/does-not-exist')->assertNotFound();
+
+    // The earlier prefix permanently redirects to the canonical URL.
+    $this->get('/project-components/does-not-exist')->assertStatus(301);
 });
 
 it('creates a component with a generated slug and a stored featured image', function () {
@@ -237,7 +240,7 @@ it('deletes a component together with its image', function () {
 
     expect(ProjectComponent::query()->whereKey($component->id)->exists())->toBeFalse();
     Storage::disk('public')->assertMissing($path);
-    $this->get('/project-components/temporary-component')->assertNotFound();
+    $this->get('/components/temporary-component')->assertNotFound();
 });
 
 it('never deletes a file another component still references', function () {
@@ -267,21 +270,21 @@ it('publishes and hides a component from the admin list', function () {
         'title' => 'Toggleable component', 'slug' => 'toggleable-component', 'display_order' => 1, 'status' => false,
     ]);
 
-    $this->get('/project-components/toggleable-component')->assertNotFound();
+    $this->get('/components/toggleable-component')->assertNotFound();
 
     $this->actingAs(componentEditor())
         ->post(route('admin.project-components.toggle', $component->id))
         ->assertRedirect();
 
     expect($component->fresh()->status)->toBeTrue();
-    $this->get('/project-components/toggleable-component')->assertOk();
+    $this->get('/components/toggleable-component')->assertOk();
 
     $this->actingAs(componentEditor())
         ->post(route('admin.project-components.toggle', $component->id))
         ->assertRedirect();
 
     expect($component->fresh()->status)->toBeFalse();
-    $this->get('/project-components/toggleable-component')->assertNotFound();
+    $this->get('/components/toggleable-component')->assertNotFound();
 });
 
 it('forbids non-administrators from managing components', function () {
@@ -317,7 +320,7 @@ it('publishes a component with no image or description using graceful fallbacks'
             ->where('dashboardComponents.0.description', null)
             ->where('dashboardComponents.0.excerpt', null));
 
-    $this->get('/project-components/component-without-media')
+    $this->get('/components/component-without-media')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('component.image', null)
@@ -328,18 +331,44 @@ it('publishes a component with no image or description using graceful fallbacks'
             ));
 });
 
-it('renders public featured images whole instead of cropping them', function () {
+it('fills card frames with cover while homepage news and detail pages show whole images', function () {
     $cards = [
-        'resources/js/components/site/latest-news.tsx',
         'resources/js/components/site/news-card.tsx',
         'resources/js/components/site/home-projects.tsx',
+        'resources/js/components/site/project-components.tsx',
         'resources/js/pages/projects/index.tsx',
     ];
 
     foreach ($cards as $card) {
         $source = file_get_contents(base_path($card));
 
-        expect($source)->toContain('object-contain')
-            ->and($source)->not->toContain('object-cover');
+        // Cards are covered edge to edge, so no letterbox bands appear.
+        expect($source)->toContain('object-cover')
+            ->and($source)->not->toContain('object-contain');
     }
+
+    // Homepage news keeps the whole photograph visible, never cropped.
+    expect(file_get_contents(base_path('resources/js/components/site/latest-news.tsx')))
+        ->toContain('object-contain');
+
+    // Detail pages show the complete image, uncropped.
+    expect(file_get_contents(base_path('resources/js/pages/project-components/show.tsx')))
+        ->toContain('object-contain');
+});
+
+it('keeps component slugs unique when titles collide', function () {
+    ProjectComponent::query()->create([
+        'title' => 'Duplicate title', 'slug' => 'duplicate-title', 'display_order' => 1, 'status' => true,
+    ]);
+
+    $this->actingAs(componentEditor())
+        ->post(route('admin.project-components.store'), [
+            'title' => 'Duplicate title',
+            'description' => 'Second record.',
+            'display_order' => 2,
+            'status' => true,
+        ])
+        ->assertRedirect(route('admin.project-components.index'));
+
+    expect(ProjectComponent::query()->where('slug', 'duplicate-title-2')->exists())->toBeTrue();
 });

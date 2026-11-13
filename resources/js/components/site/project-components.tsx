@@ -20,9 +20,9 @@ interface ProjectComponentsProps {
 /**
  * Homepage Project Components. Every card is an administrator-managed record:
  * its title, photograph, description, order and visibility come from Laravel,
- * and each card links to that component's own public page. Photographs sit
- * inside a fixed frame using object-contain, so the whole image is always
- * visible whatever its aspect ratio.
+ * and each card links to that component's own public page. Photographs fill
+ * a uniform 4:3 frame with object-cover, so no card shows blank bands while
+ * the detail page shows the complete image uncropped.
  */
 export default function ProjectComponents({ components }: ProjectComponentsProps) {
     return (
@@ -62,7 +62,7 @@ export default function ProjectComponents({ components }: ProjectComponentsProps
                                                 height={360}
                                                 loading="lazy"
                                                 decoding="async"
-                                                className="block aspect-[4/3] w-full object-contain"
+                                                className="block aspect-[4/3] w-full object-cover"
                                             />
                                         ) : (
                                             <div

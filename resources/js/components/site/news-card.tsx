@@ -30,7 +30,7 @@ export default function NewsCard({ article }: { article: LatestNewsItem }) {
                         height={375}
                         loading="lazy"
                         decoding="async"
-                        className="block aspect-[465/375] w-full object-contain"
+                        className="block aspect-[465/375] w-full object-cover"
                     />
                 ) : (
                     <div aria-hidden="true" className="flex aspect-[465/375] w-full items-center justify-center">

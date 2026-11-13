@@ -3,17 +3,20 @@ import { ChevronRight, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { SheetClose, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet';
-import { siteNavigation } from '@/config/site';
+import { navigationWithClusters } from '@/config/site';
 import { cn } from '@/lib/utils';
+import type { SharedData } from '@/types';
 
 interface SiteMenuProps {
     onNavigate: () => void;
 }
 
 export default function SiteMenu({ onNavigate }: SiteMenuProps) {
-    const { url } = usePage();
+    const { url, props } = usePage<SharedData>();
     const pathname = url.split('?')[0];
     const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+    // Clusters come from Laravel, so admin-created clusters appear here.
+    const navigation = navigationWithClusters(props.navClusters ?? []);
 
     const toggleSubmenu = (label: string) => {
         setExpandedItems((current) => ({ ...current, [label]: !current[label] }));
@@ -60,7 +63,7 @@ export default function SiteMenu({ onNavigate }: SiteMenuProps) {
 
                 <nav aria-label="Main navigation">
                     <ul className="list-none">
-                        {siteNavigation.map((item) => {
+                        {navigation.map((item) => {
                             const isCurrent = item.href === '/' ? pathname === '/' : pathname === item.href;
                             const hasChildren = Boolean(item.children?.length);
                             const isExpanded = Boolean(expandedItems[item.label]);

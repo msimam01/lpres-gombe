@@ -260,8 +260,7 @@ export default function ProjectsIndex({ projects, filters, filterOptions, map }:
                                         href={project.href}
                                         className="group focus-visible:outline-lpres-green block h-full bg-[#f1f5f6] no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)] focus-visible:outline-2 focus-visible:outline-offset-4 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                                     >
-                                        {/* The featured image is shown whole inside a
-                                            fixed, tinted frame so no photograph is cropped. */}
+                                        {/* Uniform frame fully covered by the featured image. */}
                                         <div className="overflow-hidden border-b border-[#e1e8ea] bg-[#eef3f4]">
                                             {project.image ? (
                                                 <img
@@ -271,7 +270,7 @@ export default function ProjectsIndex({ projects, filters, filterOptions, map }:
                                                     height={375}
                                                     loading="lazy"
                                                     decoding="async"
-                                                    className="block aspect-[465/375] w-full object-contain"
+                                                    className="block aspect-[465/375] w-full object-cover"
                                                 />
                                             ) : (
                                                 <div

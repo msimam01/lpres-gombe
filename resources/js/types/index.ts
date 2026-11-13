@@ -32,6 +32,8 @@ export interface SharedData {
         socials: Record<string, string>;
         logo: string;
     };
+    /** Published value-chain clusters for the header dropdown. */
+    navClusters?: { label: string; href: string }[];
     /** Rotating quote on the auth split layout (optional). */
     quote?: { message: string; author: string };
     /** Page flash status messages. */

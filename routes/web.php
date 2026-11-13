@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
@@ -33,9 +34,17 @@ Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
 // Homepage project components, one stable slug-based page each. Kept on its
-// own prefix so it can never shadow /projects/{slug} or /our-projects.
-Route::get('/project-components/{component:slug}', [ProjectComponentController::class, 'show'])
+// own prefix so it can never shadow /projects/{slug} or /our-projects. The
+// earlier /project-components prefix permanently redirects to the canonical URL.
+Route::get('/components/{component:slug}', [ProjectComponentController::class, 'show'])
     ->name('project-components.show');
+Route::redirect('/project-components/{slug}', '/components/{slug}', 301)
+    ->name('project-components.legacy');
+
+// Public document library and controlled download of privately stored files.
+Route::get('/our-documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('/our-documents/{document:slug}/download', [DocumentController::class, 'download'])
+    ->name('documents.download');
 
 Route::get('/our-projects', [ProjectController::class, 'index'])->name('our-projects');
 Route::get('/our-projects/map-data', ProjectMapDataController::class)->name('our-projects.map-data');
@@ -71,6 +80,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Admin\ProjectAdminController::class => 'projects',
             Admin\ClusterAdminController::class => 'clusters',
             Admin\VisualReportAdminController::class => 'visual-reports',
+            Admin\DocumentAdminController::class => 'documents',
         ] as $crudController => $segment) {
             Route::controller($crudController)->name($segment.'.')->prefix($segment)->group(function () {
                 Route::get('/', 'index')->name('index');

@@ -59,8 +59,8 @@ export default function LatestNews({ articles, showViewMore = true }: LatestNews
                                             href={article.href}
                                             className="focus-visible:outline-lpres-green block focus-visible:outline-2 focus-visible:outline-offset-4"
                                         >
-                                            {/* Whole photograph, never cropped: the
-                                                fixed-height frame is tinted. */}
+                                            {/* Homepage news shows the whole photograph inside a
+                                                tinted frame, so nothing is cut off. */}
                                             <div className="mx-[30px] overflow-hidden bg-[#eef3f4]">
                                                 {article.image ? (
                                                     <img

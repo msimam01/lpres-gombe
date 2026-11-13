@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ValueChainCluster;
 use App\Settings\ContactSettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -42,6 +43,19 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'contact' => ContactSettings::resolve()->shared(),
+
+            // Published value-chain clusters feed the header dropdown, so a
+            // cluster created (and published) in the admin panel appears in
+            // the navigation without a code change.
+            // Named `navClusters` rather than `clusters`: the /value-chains page
+            // already sends its own `clusters` prop, which would override this.
+            'navClusters' => fn () => ValueChainCluster::published()
+                ->get(['name', 'slug'])
+                ->map(fn (ValueChainCluster $cluster) => [
+                    'label' => $cluster->name,
+                    'href' => route('value-chains.show', $cluster->slug),
+                ])
+                ->all(),
             'success' => fn () => $request->session()->get('success'),
             'error' => fn () => $request->session()->get('error'),
             'flash' => [
