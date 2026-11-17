@@ -122,6 +122,7 @@ export default function NewsShow({ article, moreNews, mediaGalleries, mediaVideo
             )}
             {lightboxIndex !== null && images[lightboxIndex] && (
                 <ImageLightbox
+                    label="Article image viewer"
                     images={images}
                     index={lightboxIndex}
                     onClose={() => setLightboxIndex(null)}

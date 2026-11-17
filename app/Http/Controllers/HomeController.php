@@ -23,6 +23,7 @@ class HomeController extends Controller
     public function index(Request $request): Response
     {
         $today = today();
+        $publicMap = config('lpres.public_map');
 
         return Inertia::render('home', [
             'dashboardComponents' => ProjectComponent::published()
@@ -87,6 +88,18 @@ class HomeController extends Controller
                 ->all(),
 
             'contact' => ContactSettings::resolve()->shared(),
+
+            // Homepage "Project Locations" map: same approved basemap config
+            // and public marker feed as the Projects listing page.
+            'map' => [
+                'tileUrl' => $publicMap['tileUrl'] ?? null,
+                'attribution' => $publicMap['attribution'] ?? '',
+                'center' => $publicMap['center'],
+                'zoom' => $publicMap['zoom'] ?? 8,
+                'minZoom' => $publicMap['minZoom'] ?? 3,
+                'maxZoom' => $publicMap['maxZoom'] ?? 19,
+                'dataUrl' => route('our-projects.map-data'),
+            ],
 
             // Homepage value-chain shortcuts link only to clusters that
             // actually exist and are published; the fallback href is the

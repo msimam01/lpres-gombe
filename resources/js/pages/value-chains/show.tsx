@@ -1,13 +1,12 @@
 import { Link } from '@inertiajs/react';
 
+import BeneficiaryChart, { type ChartPoint } from '@/components/site/beneficiary-chart';
 import PublicPage from '@/layouts/public-page';
 
 interface ClusterShowProps {
     cluster: {
         name: string;
         description: string | null;
-        chartImage: string | null;
-        chartAltText: string;
         records: {
             sNo: number;
             lga: string;
@@ -15,6 +14,10 @@ interface ClusterShowProps {
             beneficiaries: number;
         }[];
         totalBeneficiaries: number;
+        chart: {
+            title: string;
+            series: ChartPoint[];
+        };
     };
     others: { name: string; href: string }[];
 }
@@ -24,10 +27,12 @@ function formatNumber(value: number) {
 }
 
 /**
- * Value chain cluster detail: hero + heading, the authorititative uploaded
- * chart image, the beneficiary table (LGA / Ward / Number of Beneficiaries
- * with automatically-numbered S/No) and a total derived from the displayed
- * rows. The table stays usable on small screens by scrolling horizontally.
+ * Value chain cluster detail: hero + heading, a chart generated live from the
+ * cluster's beneficiary records, the beneficiary table (LGA / Ward / Number
+ * of Beneficiaries with automatically-numbered S/No) and a total derived from
+ * the same rows. No uploaded chart image is involved. The table stays usable
+ * on small screens by scrolling horizontally, and the chart scrolls instead of
+ * squeezing many ward labels.
  */
 export default function ClusterShow({ cluster, others }: ClusterShowProps) {
     return (
@@ -51,6 +56,14 @@ export default function ClusterShow({ cluster, others }: ClusterShowProps) {
                             ))}
                     </div>
                 ) : null}
+
+                {/* Beneficiary distribution chart — generated from the table rows below. */}
+                <BeneficiaryChart
+                    title={cluster.chart.title}
+                    series={cluster.chart.series}
+                    total={cluster.totalBeneficiaries}
+                    recordCount={cluster.records.length}
+                />
 
                 {/* Beneficiary table with derived S/No and derived total */}
                 {cluster.records.length > 0 && (
@@ -98,25 +111,6 @@ export default function ClusterShow({ cluster, others }: ClusterShowProps) {
                             </table>
                         </div>
                     </section>
-                )}
-
-                {/* The uploaded chart image is the authoritative visual */}
-                {cluster.chartImage && (
-                    <figure className="mt-10">
-                        <img
-                            src={cluster.chartImage}
-                            alt={cluster.chartAltText}
-                            width={1200}
-                            height={800}
-                            loading="lazy"
-                            decoding="async"
-                            className="border-[#e1e8ea] block w-full border object-contain"
-                        />
-                        <figcaption className="mt-2 text-sm text-[#838e91]">
-                            The {cluster.name} cluster chart published by the project team — the uploaded
-                            visual is authoritative; the table above holds the underlying records.
-                        </figcaption>
-                    </figure>
                 )}
 
                 {others.length > 0 && (

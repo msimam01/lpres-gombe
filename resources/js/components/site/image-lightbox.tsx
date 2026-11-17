@@ -13,6 +13,8 @@ interface ImageLightboxProps {
     index: number;
     onClose: () => void;
     onIndexChange: (index: number) => void;
+    /** Accessible dialog label; differs per surface (article, media, gallery). */
+    label?: string;
 }
 
 /**
@@ -21,7 +23,7 @@ interface ImageLightboxProps {
  * keys, and closed with Escape or the close button. Rendered in a portal above
  * the sticky header, with page scrolling locked while open.
  */
-export default function ImageLightbox({ images, index, onClose, onIndexChange }: ImageLightboxProps) {
+export default function ImageLightbox({ images, index, onClose, onIndexChange, label = 'Image viewer' }: ImageLightboxProps) {
     const closeRef = useRef<HTMLButtonElement>(null);
     const count = images.length;
     const current = images[index] ?? images[0];
@@ -84,7 +86,7 @@ export default function ImageLightbox({ images, index, onClose, onIndexChange }:
         <div
             role="dialog"
             aria-modal="true"
-            aria-label="Article image viewer"
+            aria-label={label}
             className="fixed inset-0 z-[100] flex flex-col bg-[#001f27]/95 backdrop-blur-sm"
         >
             <div className="flex items-center justify-between px-4 py-4 sm:px-6">

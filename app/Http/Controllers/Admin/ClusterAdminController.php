@@ -26,7 +26,9 @@ class ClusterAdminController extends AdminModuleController
                 // Optional: a cluster can be published with or without a
                 // description; existing descriptions are kept unless edited.
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea'],
-                ['key' => 'image_path', 'label' => 'Cluster chart / image', 'type' => 'image', 'removable' => true],
+                // No image upload: charts are generated from the beneficiary
+                // records and the cluster needs no featured image. Any image
+                // already stored on a record is left untouched.
                 [
                     'key' => 'beneficiaries',
                     'label' => 'Beneficiary records',

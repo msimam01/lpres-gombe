@@ -56,7 +56,7 @@ abstract class MediaModuleController extends AdminModuleController
     }
 
     /** @return array{0: ?string, 1: ?int} */
-    private function parseAssociation(mixed $value): array
+    protected function parseAssociation(mixed $value): array
     {
         if (! is_string($value) || $value === '') {
             return [null, null];

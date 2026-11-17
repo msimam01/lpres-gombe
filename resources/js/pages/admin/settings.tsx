@@ -1,7 +1,8 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { LocateFixed } from 'lucide-react';
+import { FormEventHandler, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -20,6 +21,11 @@ const generalFields: { key: string; label: string; type: 'text' | 'email' | 'url
     { key: 'contact_address', label: 'Contact address', type: 'text' },
     { key: 'contact_email', label: 'Contact email', type: 'email' },
     { key: 'contact_phone', label: 'Contact phone', type: 'text' },
+];
+
+const locationFields: { key: string; label: string; type: 'number' }[] = [
+    { key: 'office_latitude', label: 'Office latitude', type: 'number' },
+    { key: 'office_longitude', label: 'Office longitude', type: 'number' },
 ];
 
 const socialFields: { key: string; label: string; type: 'url' }[] = [
@@ -62,10 +68,51 @@ function TextField({
 }
 
 export default function Settings({ settings }: SettingsProps) {
+    const [locationStatus, setLocationStatus] = useState<string | null>(null);
+    const [locationError, setLocationError] = useState<string | null>(null);
+
     const form = useForm<SettingsFormShape>({
-        ...Object.fromEntries([...generalFields, ...socialFields].map((field) => [field.key, settings[field.key] ?? ''])),
+        ...Object.fromEntries(
+            [...generalFields, ...locationFields, ...socialFields].map((field) => [field.key, settings[field.key] ?? '']),
+        ),
         logo_path: null,
     });
+
+    /**
+     * Fills the coordinate inputs from the device's GPS. Browsers only expose
+     * geolocation on secure origins (https or localhost); failures are shown
+     * inline and the fields can always be typed by hand.
+     */
+    const captureCurrentLocation = () => {
+        if (typeof navigator === 'undefined' || !navigator.geolocation) {
+            setLocationError('This browser does not support location capture. Enter the coordinates manually.');
+            setLocationStatus(null);
+
+            return;
+        }
+
+        setLocationError(null);
+        setLocationStatus('Requesting your current location…');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                form.setData('office_latitude', position.coords.latitude.toFixed(6));
+                form.setData('office_longitude', position.coords.longitude.toFixed(6));
+                setLocationStatus(
+                    `Captured ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)} — review and save.`,
+                );
+            },
+            (error) => {
+                setLocationStatus(null);
+                setLocationError(
+                    error.code === error.PERMISSION_DENIED
+                        ? 'Location permission was denied. Allow it in your browser, or enter the coordinates manually.'
+                        : 'Your current location could not be captured. Enter the coordinates manually.',
+                );
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+        );
+    };
 
     const submit: FormEventHandler = (event) => {
         event.preventDefault();
@@ -101,6 +148,46 @@ export default function Settings({ settings }: SettingsProps) {
                                     error={form.errors[field.key]}
                                 />
                             ))}
+                        </div>
+                    </section>
+
+                    <section className="border-border/70 rounded-xl border bg-white p-6">
+                        <h2 className="border-b border-[#e1e8ea] pb-3 text-base font-semibold">Office location</h2>
+                        <p className="mt-3 text-sm text-[#838e91]">
+                            Coordinates of the project office. Capture them from this device or type them in manually.
+                        </p>
+                        <div className={gridClass}>
+                            {locationFields.map((field) => (
+                                <TextField
+                                    key={field.key}
+                                    id={`setting-${field.key}`}
+                                    label={field.label}
+                                    type={field.type}
+                                    value={String(form.data[field.key] ?? '')}
+                                    onChange={(value) => form.setData(field.key, value)}
+                                    error={form.errors[field.key]}
+                                />
+                            ))}
+                        </div>
+                        <div className="mt-4 flex flex-wrap items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={captureCurrentLocation}
+                                className="border-lpres-green text-lpres-deep hover:bg-lpres-green inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-semibold transition-colors hover:text-white"
+                            >
+                                <LocateFixed aria-hidden="true" className="size-4" />
+                                Use my current location
+                            </button>
+                            {locationStatus && (
+                                <p role="status" className="text-sm text-[#4b5e65]">
+                                    {locationStatus}
+                                </p>
+                            )}
+                            {locationError && (
+                                <p role="alert" className="text-sm text-red-600">
+                                    {locationError}
+                                </p>
+                            )}
                         </div>
                     </section>
 

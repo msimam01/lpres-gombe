@@ -51,7 +51,8 @@ const mainNavGroups: (NavGroup | NavItem)[] = (() => {
         title: 'Media',
         items: [
             { title: 'All Media', url: '/admin/media', icon: Images },
-            { title: 'Add Image', url: '/admin/media/images/create', icon: ImagePlus },
+            // Batch uploader: one form, several images.
+            { title: 'Add Images', url: '/admin/media/images/bulk', icon: ImagePlus },
             { title: 'Add Video', url: '/admin/media/videos/create', icon: Video },
             { title: 'Galleries', url: '/admin/media/galleries', icon: GalleryHorizontal },
             { title: 'Add Gallery', url: '/admin/media/galleries/create', icon: GalleryHorizontalEnd },

@@ -5,7 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Admin\ModuleConfig;
 use App\Models\MediaItem;
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Dedicated "Add Image" workflow: a standalone or content-associated image
@@ -40,6 +45,55 @@ class MediaImageAdminController extends MediaModuleController
                 ],
             ],
         );
+    }
+
+    /**
+     * "Add images": one form that accepts several files at once. Every file
+     * becomes its own image item so the existing single-item edit/delete
+     * workflow keeps working unchanged.
+     */
+    public function bulkCreate(): Response
+    {
+        return Inertia::render('admin/media/bulk-images', [
+            'associations' => $this::associationOptions(),
+        ]);
+    }
+
+    public function bulkStore(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'images' => ['required', 'array', 'min:1', 'max:30'],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'caption' => ['nullable', 'string'],
+            'associated' => ['nullable', 'string'],
+            'status' => ['nullable', Rule::in(['draft', 'published'])],
+        ]);
+
+        [$associatedType, $associatedId] = $this->parseAssociation($validated['associated'] ?? null);
+        $status = $validated['status'] ?? 'published';
+        $caption = $validated['caption'] ?? null;
+
+        $created = 0;
+
+        foreach ($request->file('images', []) as $file) {
+            $title = Str::title(str_replace(['-', '_'], ' ', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)));
+
+            MediaItem::create([
+                'title' => Str::limit(trim($title) !== '' ? trim($title) : 'Media image', 120, ''),
+                'caption' => $caption,
+                'image_path' => $file->store('uploads/media/images', 'public'),
+                'media_type' => MediaItem::TYPE_IMAGE,
+                'associated_type' => $associatedType,
+                'associated_id' => $associatedId,
+                'status' => $status,
+            ]);
+
+            $created++;
+        }
+
+        return redirect()
+            ->route('admin.media.index')
+            ->with('success', $created.' image'.($created === 1 ? '' : 's').' added.');
     }
 
     protected function validatePayload(Request $request, ModuleConfig $config, ?int $ignoreId = null): array

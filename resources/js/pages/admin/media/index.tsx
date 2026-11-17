@@ -31,7 +31,8 @@ interface MediaIndexProps {
 }
 
 const ADD_MEDIA = [
-    { label: 'Add image', href: '/admin/media/images/create' },
+    // "Add images" opens the batch uploader; every file becomes its own item.
+    { label: 'Add images', href: '/admin/media/images/bulk' },
     { label: 'Add video', href: '/admin/media/videos/create' },
     { label: 'Add gallery', href: '/admin/media/galleries/create' },
 ];

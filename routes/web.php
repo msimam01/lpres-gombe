@@ -116,6 +116,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 });
         }
 
+        // Bulk "Add images": several files in one submit, each creating its
+        // own image item. Registered before the media group's {id} routes so
+        // the static path always wins.
+        Route::get('media/images/bulk', [Admin\MediaImageAdminController::class, 'bulkCreate'])
+            ->name('media.images.bulk');
+        Route::post('media/images/bulk', [Admin\MediaImageAdminController::class, 'bulkStore'])
+            ->name('media.images.bulk-store');
+
         // Category classification modules: no publication workflow, so no
         // publish/unpublish action exists for them.
         foreach ([

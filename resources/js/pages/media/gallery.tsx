@@ -1,8 +1,10 @@
 import ImageGallery from '@/components/site/image-gallery';
+import ImageLightbox from '@/components/site/image-lightbox';
 import PublicPage from '@/layouts/public-page';
 import EmptyState from '@/components/site/empty-state';
 import { Link } from '@inertiajs/react';
 import { Images, MapPin } from 'lucide-react';
+import { useState } from 'react';
 
 interface GalleryShowProps {
     gallery: {
@@ -16,6 +18,8 @@ interface GalleryShowProps {
 }
 
 export default function GalleryShow({ gallery, otherGalleries }: GalleryShowProps) {
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
     return (
         <PublicPage
             title={gallery.title}
@@ -59,12 +63,22 @@ export default function GalleryShow({ gallery, otherGalleries }: GalleryShowProp
 
                 <div className="mt-10">
                     {gallery.images.length > 0 ? (
-                        <ImageGallery items={gallery.images} />
+                        <ImageGallery items={gallery.images} onSelect={setLightboxIndex} />
                     ) : (
                         <EmptyState message="No images have been added to this gallery yet." />
                     )}
                 </div>
             </article>
+
+            {lightboxIndex !== null && gallery.images[lightboxIndex] && (
+                <ImageLightbox
+                    images={gallery.images.map((image) => ({ ...image, caption: gallery.title }))}
+                    index={lightboxIndex}
+                    onClose={() => setLightboxIndex(null)}
+                    onIndexChange={setLightboxIndex}
+                    label="Gallery image viewer"
+                />
+            )}
 
             {otherGalleries.length > 0 && (
                 <section aria-labelledby="other-galleries" className="mt-14">

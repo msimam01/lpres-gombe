@@ -18,6 +18,7 @@ class SettingsController extends Controller
 {
     private const KEYS = [
         'contact_address', 'contact_email', 'contact_phone',
+        'office_latitude', 'office_longitude',
         'social_facebook', 'social_x', 'social_linkedin', 'social_youtube',
     ];
 
@@ -37,6 +38,10 @@ class SettingsController extends Controller
             'contact_address' => ['nullable', 'string', 'max:255'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:40'],
+            // Office coordinates: GPS-captured in the admin form or typed by
+            // hand; blank means "not recorded" rather than 0,0.
+            'office_latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'office_longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'social_facebook' => ['nullable', 'url', 'max:255'],
             'social_x' => ['nullable', 'url', 'max:255'],
             'social_linkedin' => ['nullable', 'url', 'max:255'],

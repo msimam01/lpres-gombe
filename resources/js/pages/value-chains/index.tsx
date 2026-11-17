@@ -1,4 +1,5 @@
 import PublicPage from '@/layouts/public-page';
+import ClusterCardChart from '@/components/site/cluster-card-chart';
 import EmptyState from '@/components/site/empty-state';
 import { Link } from '@inertiajs/react';
 
@@ -8,6 +9,8 @@ interface ClusterCard {
     href: string;
     excerpt: string | null;
     image: string | null;
+    /** Chart preview used when the cluster has no featured image. */
+    chart: { label: string; value: number }[];
     recordCount: number;
     totalBeneficiaries: number;
 }
@@ -17,9 +20,10 @@ interface ValueChainsIndexProps {
 }
 
 /**
- * Value Chain Clusters landing page. Each card shows the cluster's uploaded
- * chart/image (the authoritative visual) together with the record count and
- * the total number of beneficiaries held in its table.
+ * Value Chain Clusters landing page. Each card shows a compact preview of the
+ * cluster's generated beneficiary chart (falling back to a stored image only
+ * when the cluster has no records), together with the record count and the
+ * total number of beneficiaries held in its table.
  */
 export default function ValueChainsIndex({ clusters }: ValueChainsIndexProps) {
     return (
@@ -29,14 +33,18 @@ export default function ValueChainsIndex({ clusters }: ValueChainsIndexProps) {
             description="The commodity value-chain clusters supported by the Gombe State L-PRES project."
         >
             {clusters.length > 0 ? (
-                <ul className="grid list-none gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="grid list-none grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {clusters.map((cluster) => (
                         <li key={cluster.id}>
                             <Link href={cluster.href} className="group block h-full bg-[#f1f5f6] text-center no-underline">
-                                {cluster.image ? (
+                                {cluster.chart.length > 0 ? (
+                                    // Live distribution preview — the card no longer
+                                    // depends on an uploaded chart image.
+                                    <ClusterCardChart clusterName={cluster.name} series={cluster.chart} />
+                                ) : cluster.image ? (
                                     <img
                                         src={cluster.image}
-                                        alt={`Cluster chart for ${cluster.name}`}
+                                        alt={`Featured image for ${cluster.name}`}
                                         width={370}
                                         height={280}
                                         loading="lazy"

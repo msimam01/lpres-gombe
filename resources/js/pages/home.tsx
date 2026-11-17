@@ -4,6 +4,7 @@ import BeneficiaryStatistics from '@/components/site/beneficiary-statistics';
 import HeroCarousel from '@/components/site/hero-carousel';
 import HomeContact, { type HomeContactSettings } from '@/components/site/home-contact';
 import HomeEvents, { type HomeEventItem } from '@/components/site/home-events';
+import HomeProjectLocations from '@/components/site/home-project-locations';
 import HomeProjects, { type HomeProjectItem } from '@/components/site/home-projects';
 import LatestNews, { type LatestNewsItem } from '@/components/site/latest-news';
 import MissionVisionValues from '@/components/site/mission-vision-values';
@@ -16,6 +17,7 @@ import SiteFooter from '@/components/site/site-footer';
 import SpcQuotes from '@/components/site/spc-quotes';
 import ValueChainShortcuts from '@/components/site/value-chain-shortcuts';
 import WelcomeNote from '@/components/site/welcome-note';
+import type { PublicMapConfig } from '@/components/site/projects-map';
 import { heroSlides } from '@/config/site';
 import BackToTop from '@/components/site/back-to-top';
 
@@ -30,9 +32,11 @@ interface HomeProps {
     upcomingEvents: HomeEventItem[];
     /** Admin-managed contact details. */
     contact: HomeContactSettings;
+    /** Public projects map configuration plus its marker feed URL. */
+    map: PublicMapConfig & { dataUrl: string };
 }
 
-export default function Home({ dashboardComponents, latestNews, homeProjects, upcomingEvents, contact }: HomeProps) {
+export default function Home({ dashboardComponents, latestNews, homeProjects, upcomingEvents, contact, map }: HomeProps) {
     return (
         <>
             <Head title="Home">
@@ -58,6 +62,7 @@ export default function Home({ dashboardComponents, latestNews, homeProjects, up
                     <PartnersSupporters />
                     <SpcQuotes />
                     <HomeProjects projects={homeProjects} />
+                    <HomeProjectLocations map={map} />
                     <LatestNews articles={latestNews} />
                     <HomeEvents events={upcomingEvents} />
                     <HomeContact contact={contact} />

@@ -1,5 +1,6 @@
 import PublicPage from '@/layouts/public-page';
 import EmptyState from '@/components/site/empty-state';
+import ImageLightbox from '@/components/site/image-lightbox';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from '@inertiajs/react';
 import SectionHeading from '@/components/site/section-heading';
@@ -55,7 +56,14 @@ function toEmbedUrl(url: string): string | null {
  */
 export default function Media({ galleries, images, videos }: MediaProps) {
     const [openId, setOpenId] = useState<number | null>(null);
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const closeRef = useRef<HTMLButtonElement>(null);
+
+    // Every published image joins one browsable sequence, so the viewer's
+    // previous/next buttons walk through the whole Images section.
+    const lightboxImages = images.flatMap((item) =>
+        item.image ? [{ id: item.id, src: item.image, alt: item.title, caption: item.caption ?? item.title }] : [],
+    );
 
     const flatMedia = [...images, ...videos];
     const openItem = flatMedia.find((item) => item.id === openId) ?? null;
@@ -220,14 +228,11 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                         <section aria-labelledby="media-images-heading">
                             <SectionHeading eyebrow="Photo highlights" title="Images" id="media-images-heading" />
                             <ul className="mt-8 grid list-none gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                {images.map((item) => (
-                                    <li key={item.id}>
-                                        <button
-                                            type="button"
-                                            onClick={() => setOpenId(item.id)}
-                                            className="group block h-full w-full border border-[#e1e8ea] bg-[#f1f5f6] text-center no-underline"
-                                            aria-label={`Open the full image: ${item.title}`}
-                                        >
+                                {images.map((item) => {
+                                    // Only items with an uploaded image join the
+                                    // browsable sequence; the rest stay static.
+                                    const card = (
+                                        <>
                                             {item.image ? (
                                                 <img
                                                     src={item.image}
@@ -248,13 +253,47 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                                                 {item.caption && <p className="mt-1 text-sm leading-6 text-[#838e91]">{item.caption}</p>}
                                                 {linkTo(item)}
                                             </div>
-                                        </button>
-                                    </li>
-                                ))}
+                                        </>
+                                    );
+
+                                    return (
+                                        <li key={item.id}>
+                                            {item.image ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const index = lightboxImages.findIndex((entry) => entry.id === item.id);
+                                                        if (index >= 0) {
+                                                            setLightboxIndex(index);
+                                                        }
+                                                    }}
+                                                    className="group block h-full w-full border border-[#e1e8ea] bg-[#f1f5f6] text-center no-underline"
+                                                    aria-label={`Open the full image: ${item.title}`}
+                                                >
+                                                    {card}
+                                                </button>
+                                            ) : (
+                                                <div className="block h-full w-full border border-[#e1e8ea] bg-[#f1f5f6] text-center">
+                                                    {card}
+                                                </div>
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </section>
                     )}
                 </div>
+            )}
+
+            {lightboxIndex !== null && lightboxImages[lightboxIndex] && (
+                <ImageLightbox
+                    images={lightboxImages}
+                    index={lightboxIndex}
+                    onClose={() => setLightboxIndex(null)}
+                    onIndexChange={setLightboxIndex}
+                    label="Media image viewer"
+                />
             )}
 
             {openItem && (
