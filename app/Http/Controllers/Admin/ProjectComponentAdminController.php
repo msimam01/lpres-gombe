@@ -26,6 +26,15 @@ class ProjectComponentAdminController extends AdminModuleController
                     'required' => true,
                     'help' => 'Shown as the card heading on the homepage and as the page title.',
                 ],
+                // The featured image sits beside the title, not down in Media.
+                [
+                    'key' => 'image_path',
+                    'label' => 'Featured image',
+                    'type' => 'image',
+                    'removable' => true,
+                    'section' => 'details',
+                    'help' => 'JPG, PNG or WebP up to 4 MB. The card frame is filled; the detail page shows the whole image.',
+                ],
                 [
                     'key' => 'slug',
                     'label' => 'Slug',
@@ -37,13 +46,6 @@ class ProjectComponentAdminController extends AdminModuleController
                     'label' => 'Description',
                     'type' => 'textarea',
                     'help' => 'A short excerpt appears on the homepage card; the full text appears on the component page.',
-                ],
-                [
-                    'key' => 'image_path',
-                    'label' => 'Featured image',
-                    'type' => 'image',
-                    'removable' => true,
-                    'help' => 'JPG, PNG or WebP up to 4 MB. The card frame is filled; the detail page shows the whole image.',
                 ],
                 [
                     'key' => 'display_order',

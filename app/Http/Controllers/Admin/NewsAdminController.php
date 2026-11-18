@@ -18,8 +18,9 @@ class NewsAdminController extends AdminModuleController
             titleFrom: 'title',
             fields: [
                 ['key' => 'title', 'label' => 'Title', 'type' => 'text', 'required' => true],
+                // The featured image sits beside the title, not down in Media.
+                ['key' => 'featured_image_path', 'label' => 'Featured image', 'type' => 'image', 'section' => 'details'],
                 ['key' => 'body', 'label' => 'Body', 'type' => 'textarea', 'required' => true],
-                ['key' => 'featured_image_path', 'label' => 'Featured image', 'type' => 'image'],
                 // Images embedded in the article body (imported from WordPress).
                 ['key' => 'gallery_image_paths', 'label' => 'Article images', 'type' => 'gallery'],
                 ['key' => 'published_at', 'label' => 'Publication date', 'type' => 'date'],

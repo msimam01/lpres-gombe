@@ -11,7 +11,7 @@ return [
     /**
      * Number of published projects shown in the homepage Projects section.
      */
-    'homepage_projects_count' => (int) env('CMS_HOMEPAGE_PROJECTS_COUNT', 3),
+    'homepage_projects_count' => (int) env('CMS_HOMEPAGE_PROJECTS_COUNT', 6),
 
     /**
      * Number of upcoming published events shown in the homepage Events

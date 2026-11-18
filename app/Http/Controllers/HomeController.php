@@ -57,7 +57,7 @@ class HomeController extends Controller
 
             'homeProjects' => Project::published()
                 ->with('category:id,name,slug')
-                ->take((int) config('cms.homepage_projects_count', 3))
+                ->take((int) config('cms.homepage_projects_count', 6))
                 ->get(['id', 'title', 'slug', 'featured_image_path', 'description', 'project_category_id'])
                 ->map(fn (Project $project) => [
                     'id' => $project->id,

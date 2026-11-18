@@ -19,6 +19,8 @@ class ProjectAdminController extends AdminModuleController
             titleFrom: 'title',
             fields: [
                 ['key' => 'title', 'label' => 'Title', 'type' => 'text', 'required' => true],
+                // The featured image sits beside the title, not down in Media.
+                ['key' => 'featured_image_path', 'label' => 'Featured image', 'type' => 'image', 'section' => 'details'],
                 [
                     'key' => 'project_category_id',
                     'label' => 'Category',
@@ -70,7 +72,6 @@ class ProjectAdminController extends AdminModuleController
                     'help' => 'Click the map or use the device location button, then drag the pin to refine it.',
                 ],
 
-                ['key' => 'featured_image_path', 'label' => 'Featured image', 'type' => 'image'],
                 ['key' => 'gallery_image_paths', 'label' => 'Project gallery', 'type' => 'gallery'],
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea', 'required' => true],
                 [

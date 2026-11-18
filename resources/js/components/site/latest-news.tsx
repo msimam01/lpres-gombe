@@ -33,7 +33,7 @@ interface LatestNewsProps {
  */
 export default function LatestNews({ articles, showViewMore = true }: LatestNewsProps) {
     return (
-        <section aria-labelledby="latest-news-heading" className="pt-[120px] pb-[120px] max-[1199px]:pt-[70px] max-[1199px]:pb-[70px]">
+        <section aria-labelledby="latest-news-heading" className="bg-[#eef5f0] pt-[120px] pb-[120px] max-[1199px]:pt-[70px] max-[1199px]:pb-[70px]">
             <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-6 lg:px-0">
                 <SectionHeading eyebrow="Gombe L-PRES" title="Latest News" id="latest-news-heading" />
 

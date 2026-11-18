@@ -72,24 +72,25 @@ export default function HomeProjectLocations({ map }: HomeProjectLocationsProps)
                     ariaLabel="Map of published L-PRES project locations in Gombe State"
                 />
 
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="mt-6 flex flex-wrap text-center items-center justify-between gap-4">
                     <p className="inline-flex items-center gap-2 text-sm font-semibold text-[#4b5e65]">
                         <MapPin aria-hidden="true" className="text-lpres-green size-4" />
                         {loading
                             ? 'Loading project locations…'
                             : `${markers.length} project ${markers.length === 1 ? 'location' : 'locations'} shown on the map`}
                     </p>
-
-                    <Link
-                        href="/our-projects"
-                        className="focus-visible:outline-lpres-deep group border-lpres-green text-lpres-deep hover:bg-lpres-green inline-flex h-[46px] items-center gap-3 border px-6 text-xs font-extrabold tracking-[0.5px] uppercase transition-colors duration-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-none"
-                    >
-                        View all projects
-                        <ArrowRight
-                            aria-hidden="true"
-                            className="size-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
-                        />
-                    </Link>
+                    <div className="mb-10 mt-12 text-center">
+                        <Link
+                            href="/our-projects"
+                            className="focus-visible:outline-lpres-deep group border-lpres-green text-lpres-deep hover:bg-lpres-green inline-flex h-[52px] items-center gap-3 border px-8 text-sm font-extrabold tracking-[0.5px] uppercase transition-colors duration-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-none"
+                        >
+                            View all projects
+                            <ArrowRight
+                                aria-hidden="true"
+                                className="size-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+                            />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </section>

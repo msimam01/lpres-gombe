@@ -16,8 +16,9 @@ class EventAdminController extends AdminModuleController
             titleFrom: 'title',
             fields: [
                 ['key' => 'title', 'label' => 'Title', 'type' => 'text', 'required' => true],
+                // The featured image sits beside the title, not down in Media.
+                ['key' => 'image_path', 'label' => 'Featured image', 'type' => 'image', 'section' => 'details'],
                 ['key' => 'description', 'label' => 'Description', 'type' => 'textarea', 'required' => true],
-                ['key' => 'image_path', 'label' => 'Image', 'type' => 'image'],
                 ['key' => 'gallery_image_paths', 'label' => 'Event gallery', 'type' => 'gallery'],
                 ['key' => 'starts_at', 'label' => 'Starts on', 'type' => 'date'],
                 ['key' => 'ends_at', 'label' => 'Ends on', 'type' => 'date'],
