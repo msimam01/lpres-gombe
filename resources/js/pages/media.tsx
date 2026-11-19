@@ -1,10 +1,10 @@
-import PublicPage from '@/layouts/public-page';
 import EmptyState from '@/components/site/empty-state';
 import ImageLightbox from '@/components/site/image-lightbox';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from '@inertiajs/react';
 import SectionHeading from '@/components/site/section-heading';
+import PublicPage from '@/layouts/public-page';
+import { Link } from '@inertiajs/react';
 import { FolderOpen, Images, MapPin, PlayCircle } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface GalleryCard {
     id: number;
@@ -24,6 +24,7 @@ export interface MediaCard {
     image: string | null;
     thumbnail: string | null;
     videoUrl: string | null;
+    provider: string | null;
     caption: string | null;
     seenOnLabel: string | null;
     seenOnHref: string | null;
@@ -104,11 +105,7 @@ export default function Media({ galleries, images, videos }: MediaProps) {
         ) : null;
 
     return (
-        <PublicPage
-            title="Media"
-            eyebrow="Photo & Video"
-            description="Photos, galleries and videos from the Gombe State L-PRES project."
-        >
+        <PublicPage title="Media" eyebrow="Photo & Video" description="Photos, galleries and videos from the Gombe State L-PRES project.">
             {galleries.length === 0 && images.length === 0 && videos.length === 0 ? (
                 <EmptyState message="No media has been published yet. Photos, galleries and videos added in the admin panel will appear here." />
             ) : (
@@ -137,7 +134,7 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                                                 ) : (
                                                     <div
                                                         aria-hidden="true"
-                                                        className="flex aspect-[465/375] w-full items-center justify-center bg-lpres-deep"
+                                                        className="bg-lpres-deep flex aspect-[465/375] w-full items-center justify-center"
                                                     >
                                                         <FolderOpen className="size-12 text-white/30" aria-hidden="true" />
                                                     </div>
@@ -148,13 +145,13 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                                                 </span>
                                             </div>
                                             <div className="px-[26px] py-6">
-                                                <h2 className="text-lg leading-7 font-extrabold text-lpres-deep transition-colors duration-500 group-hover:text-lpres-green">
+                                                <h2 className="text-lpres-deep group-hover:text-lpres-green text-lg leading-7 font-extrabold transition-colors duration-500">
                                                     {gallery.title}
                                                 </h2>
                                                 {gallery.description && (
                                                     <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#838e91]">{gallery.description}</p>
                                                 )}
-                                                {(gallery.seenOnLabel && gallery.seenOnHref) && (
+                                                {gallery.seenOnLabel && gallery.seenOnHref && (
                                                     <Link
                                                         href={gallery.seenOnHref}
                                                         onClick={(event) => event.stopPropagation()}
@@ -176,50 +173,98 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                         <section aria-labelledby="media-videos-heading">
                             <SectionHeading eyebrow="Watch" title="Videos" id="media-videos-heading" />
                             <ul className="mt-8 grid list-none gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                                {videos.map((item) => (
-                                    <li key={item.id}>
-                                        <button
-                                            type="button"
-                                            onClick={() => setOpenId(item.id)}
-                                            className="group block h-full w-full border border-[#e1e8ea] bg-white text-center no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)]"
-                                            aria-label={`Play video: ${item.title}`}
-                                        >
-                                            <div className="relative overflow-hidden">
-                                                {item.thumbnail ? (
-                                                    <img
-                                                        src={item.thumbnail}
-                                                        alt={item.title}
-                                                        width={465}
-                                                        height={375}
-                                                        loading="lazy"
-                                                        decoding="async"
-                                                        className="block aspect-[465/375] w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                                                    />
-                                                ) : (
-                                                    <div
-                                                        aria-hidden="true"
-                                                        className="flex aspect-[465/375] w-full items-center justify-center bg-lpres-deep"
-                                                    >
-                                                        <PlayCircle className="size-12 text-white/30" aria-hidden="true" />
-                                                    </div>
-                                                )}
-                                                <span
+                                {videos.map((item) => {
+                                    const media = (
+                                        <div className="relative overflow-hidden">
+                                            {item.thumbnail ? (
+                                                <img
+                                                    src={item.thumbnail}
+                                                    alt={item.title}
+                                                    width={465}
+                                                    height={375}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    className="block aspect-[465/375] w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                                                />
+                                            ) : (
+                                                <div
                                                     aria-hidden="true"
-                                                    className="absolute top-1/2 left-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-lpres-deep transition-transform duration-500 group-hover:scale-110"
+                                                    className="bg-lpres-deep flex aspect-[465/375] w-full items-center justify-center"
                                                 >
-                                                    ▶
-                                                </span>
-                                            </div>
-                                            <div className="px-5 py-5">
-                                                <h2 className="text-lg leading-7 font-extrabold text-lpres-deep transition-colors duration-500 group-hover:text-lpres-green">
-                                                    {item.title}
-                                                </h2>
-                                                {item.caption && <p className="mt-1 text-sm leading-6 text-[#838e91]">{item.caption}</p>}
-                                                {linkTo(item)}
-                                            </div>
-                                        </button>
-                                    </li>
-                                ))}
+                                                    <PlayCircle className="size-12 text-white/30" aria-hidden="true" />
+                                                </div>
+                                            )}
+                                            <span
+                                                aria-hidden="true"
+                                                className="text-lpres-deep absolute top-1/2 left-1/2 grid size-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 transition-transform duration-500 group-hover:scale-110"
+                                            >
+                                                ▶
+                                            </span>
+                                        </div>
+                                    );
+
+                                    const meta = (
+                                        <>
+                                            <h2 className="text-lpres-deep group-hover:text-lpres-green text-lg leading-7 font-extrabold transition-colors duration-500">
+                                                {item.title}
+                                            </h2>
+                                            {item.caption && <p className="mt-1 text-sm leading-6 text-[#838e91]">{item.caption}</p>}
+                                        </>
+                                    );
+
+                                    const shell =
+                                        'group block h-full w-full border border-[#e1e8ea] bg-white text-center no-underline transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)]';
+
+                                    const facebookHint = item.provider === 'facebook' && (
+                                        <span className="text-lpres-green mt-2 inline-flex items-center gap-1.5 text-xs font-extrabold tracking-[0.5px] uppercase">
+                                            Watch on Facebook
+                                        </span>
+                                    );
+
+                                    const isFacebook = item.provider === 'facebook' && Boolean(item.videoUrl);
+
+                                    // Facebook videos cannot be embedded, so the
+                                    // card is a real link: the cover looks like
+                                    // the video and clicking opens it on
+                                    // Facebook, where it plays. The association
+                                    // link sits outside the anchor so markup
+                                    // stays valid (no nested links).
+                                    return (
+                                        <li key={item.id}>
+                                            {isFacebook ? (
+                                                <div className={shell}>
+                                                    <a
+                                                        href={item.videoUrl!}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="block"
+                                                        aria-label={`Play video on Facebook: ${item.title}`}
+                                                    >
+                                                        {media}
+                                                        <div className="px-5 pt-5">{meta}</div>
+                                                    </a>
+                                                    <div className="px-5 pt-2 pb-5">
+                                                        {facebookHint}
+                                                        {linkTo(item)}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setOpenId(item.id)}
+                                                    className={shell}
+                                                    aria-label={`Play video: ${item.title}`}
+                                                >
+                                                    {media}
+                                                    <div className="px-5 py-5">
+                                                        {meta}
+                                                        {linkTo(item)}
+                                                    </div>
+                                                </button>
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </section>
                     )}
@@ -244,10 +289,10 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                                                     className="block aspect-[370/280] w-full object-cover transition-[filter] duration-500 group-hover:brightness-110"
                                                 />
                                             ) : (
-                                                <div aria-hidden="true" className="block aspect-[370/280] w-full bg-lpres-deep" />
+                                                <div aria-hidden="true" className="bg-lpres-deep block aspect-[370/280] w-full" />
                                             )}
                                             <div className="px-4 py-5">
-                                                <h2 className="text-lg leading-7 font-extrabold text-lpres-deep transition-colors duration-500 group-hover:text-lpres-green">
+                                                <h2 className="text-lpres-deep group-hover:text-lpres-green text-lg leading-7 font-extrabold transition-colors duration-500">
                                                     {item.title}
                                                 </h2>
                                                 {item.caption && <p className="mt-1 text-sm leading-6 text-[#838e91]">{item.caption}</p>}
@@ -273,9 +318,7 @@ export default function Media({ galleries, images, videos }: MediaProps) {
                                                     {card}
                                                 </button>
                                             ) : (
-                                                <div className="block h-full w-full border border-[#e1e8ea] bg-[#f1f5f6] text-center">
-                                                    {card}
-                                                </div>
+                                                <div className="block h-full w-full border border-[#e1e8ea] bg-[#f1f5f6] text-center">{card}</div>
                                             )}
                                         </li>
                                     );
@@ -297,13 +340,18 @@ export default function Media({ galleries, images, videos }: MediaProps) {
             )}
 
             {openItem && (
-                <div role="dialog" aria-modal="true" aria-label={openItem.title} className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-6">
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={openItem.title}
+                    className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-6"
+                >
                     <button
                         ref={closeRef}
                         type="button"
                         onClick={close}
                         aria-label="Close viewer"
-                        className="text-3xl absolute top-4 right-4 size-12 cursor-pointer font-bold text-white"
+                        className="absolute top-4 right-4 size-12 cursor-pointer text-3xl font-bold text-white"
                     >
                         ×
                     </button>

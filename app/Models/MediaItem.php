@@ -87,6 +87,26 @@ class MediaItem extends Model
     }
 
     /**
+     * Which external service hosts a stored video URL: `youtube`, `facebook`
+     * or null when the URL is neither. Used to decide how the public page
+     * plays the item (inline embed vs. opening the host site).
+     */
+    public static function videoProvider(?string $url): ?string
+    {
+        if (! $url) {
+            return null;
+        }
+
+        if (self::youtubeId($url) !== null) {
+            return 'youtube';
+        }
+
+        return preg_match('#^(?:https?://)?(?:www\.|m\.|web\.)?(?:facebook\.com/|fb\.watch/)#i', $url)
+            ? 'facebook'
+            : null;
+    }
+
+    /**
      * A stable YouTube thumbnail for the given video URL, when extractable.
      */
     public static function youtubeId(?string $url): ?string

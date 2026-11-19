@@ -44,7 +44,7 @@ export default function LatestNews({ articles, showViewMore = true }: LatestNews
 
                             return (
                                 <li key={article.id} className="mt-[155px]">
-                                    <article className="group relative bg-[#f1f5f6] text-center transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                                    <article className="group relative bg-white text-center transition-[transform,box-shadow] duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_44px_-20px_rgba(0,59,73,0.35)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
                                         {hasDate && (
                                             <span
                                                 aria-hidden="true"
@@ -117,7 +117,10 @@ export default function LatestNews({ articles, showViewMore = true }: LatestNews
                             className="focus-visible:outline-lpres-deep group border-lpres-green text-lpres-deep hover:bg-lpres-green inline-flex h-[52px] items-center gap-3 border px-8 text-sm font-extrabold tracking-[0.5px] uppercase transition-colors duration-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-none"
                         >
                             View More
-                            <ArrowRight aria-hidden="true" className="size-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" />
+                            <ArrowRight
+                                aria-hidden="true"
+                                className="size-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+                            />
                         </Link>
                     </div>
                 )}

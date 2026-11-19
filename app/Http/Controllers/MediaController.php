@@ -50,6 +50,9 @@ class MediaController extends Controller
                         ? asset('storage/'.$item->thumbnail_path)
                         : ($youtubeId ? 'https://i.ytimg.com/vi/'.$youtubeId.'/hqdefault.jpg' : null),
                     'videoUrl' => $item->video_url,
+                    // Which host plays the video; Facebook items open there
+                    // instead of embedding, since they cannot be framed.
+                    'provider' => $isVideo ? MediaItem::videoProvider($item->video_url) : null,
                     'caption' => $item->caption,
                     'seenOnLabel' => $this->associationLabel($item->resolveAssociated(), $item->associated_type),
                     'seenOnHref' => $item->associationHref(),

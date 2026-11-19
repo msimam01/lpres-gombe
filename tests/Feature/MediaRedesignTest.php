@@ -36,7 +36,67 @@ it('creates a video item from a YouTube URL and stores the canonical watch URL',
         ->and($item->video_url)->toBe('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 });
 
-it('rejects non-YouTube video URLs and raw embed markup', function () {
+it('creates a Facebook video with a cover image that links to Facebook publicly', function () {
+    Storage::fake('public');
+
+    $this->actingAs(mediaAdmin())
+        ->post(route('admin.media.videos.store'), [
+            'title' => 'Facebook field coverage',
+            'caption' => 'Shared from our page.',
+            'video_url' => 'https://www.facebook.com/watch/?v=1234567890',
+            'thumbnail_path' => UploadedFile::fake()->createWithContent('cover.jpg', realJpeg()),
+            'status' => 'published',
+        ])->assertRedirect();
+
+    $item = MediaItem::query()->where('title', 'Facebook field coverage')->firstOrFail();
+    expect($item->video_url)->toBe('https://www.facebook.com/watch/?v=1234567890')
+        ->and($item->thumbnail_path)->not->toBeNull();
+    Storage::disk('public')->assertExists($item->thumbnail_path);
+
+    $this->get('/media')->assertOk()->assertInertia(fn (Assert $page) => $page
+        ->component('media')
+        ->where('videos.0.provider', 'facebook')
+        ->where('videos.0.videoUrl', 'https://www.facebook.com/watch/?v=1234567890')
+        ->where('videos.0.thumbnail', asset('storage/'.$item->thumbnail_path)));
+});
+
+it('requires a cover image for Facebook videos, accepts bare fb.watch links and keeps the cover on edit', function () {
+    Storage::fake('public');
+
+    $this->actingAs(mediaAdmin())
+        ->from(route('admin.media.videos.create'))
+        ->post(route('admin.media.videos.store'), [
+            'title' => 'No cover',
+            'video_url' => 'https://fb.watch/abcdEfgh/',
+            'status' => 'published',
+        ])->assertSessionHasErrors('thumbnail_path');
+
+    expect(MediaItem::where('title', 'No cover')->exists())->toBeFalse();
+
+    $this->actingAs(mediaAdmin())
+        ->post(route('admin.media.videos.store'), [
+            'title' => 'Bare watch link',
+            'video_url' => 'fb.watch/abcdEfgh/',
+            'thumbnail_path' => UploadedFile::fake()->createWithContent('cover.jpg', realJpeg()),
+            'status' => 'published',
+        ])->assertRedirect();
+
+    $item = MediaItem::where('title', 'Bare watch link')->firstOrFail();
+    expect($item->video_url)->toBe('https://fb.watch/abcdEfgh/');
+
+    // Editing without a new upload keeps the stored cover and does not fail.
+    $this->actingAs(mediaAdmin())
+        ->put(route('admin.media.videos.update', $item->id), [
+            'title' => 'Bare watch link',
+            'video_url' => 'https://fb.watch/abcdEfgh/',
+            'thumbnail_path' => '',
+            'status' => 'published',
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+    expect($item->fresh()->thumbnail_path)->toBe($item->thumbnail_path);
+});
+
+it('rejects non-YouTube, non-Facebook video URLs and raw embed markup', function () {
     Storage::fake('public');
 
     $this->actingAs(mediaAdmin())
